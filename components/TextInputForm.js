@@ -1,6 +1,6 @@
 import React from "react";
 
-const InputForm = ({searchQuery, setSearchQuery}) => {
+const TextInputForm = ({ searchQuery, setSearchQuery }) => {
   function handleChange(evt) {
     const input = evt.target;
     setSearchQuery(input.value);
@@ -22,4 +22,4 @@ const InputForm = ({searchQuery, setSearchQuery}) => {
   );
 };
 
-export default InputForm;
+export default TextInputForm;

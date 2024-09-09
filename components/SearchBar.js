@@ -2,7 +2,7 @@
 import { React, useState } from "react";
 import SearchByImageButtonAndModal from "./SearchByImageButtonAndModal";
 import SelectedImageDisplay from "./SelectedImageDisplay";
-import InputForm from "./InputForm";
+import TextInputForm from "./TextInputForm";
 
 const SearchBar = ({
   imgQuerySrc,
@@ -32,7 +32,7 @@ const SearchBar = ({
           />
         )}
         {!imgQuerySrc && (
-          <InputForm
+          <TextInputForm
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
           />
