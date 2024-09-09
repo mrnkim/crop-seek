@@ -1,7 +1,8 @@
 "use client";
-import React from "react";
+import { React, useState } from "react";
 import SearchByImageButtonAndModal from "./SearchByImageButtonAndModal";
 import SelectedImageDisplay from "./SelectedImageDisplay";
+import InputForm from "./InputForm";
 
 const SearchBar = ({
   imgQuerySrc,
@@ -11,6 +12,8 @@ const SearchBar = ({
   clearImageQuery,
   onImageSelected,
 }) => {
+  const [searchQuery, setSearchQuery] = useState("");
+
   return (
     <div className="w-full max-w-4xl h-14 py-3 bg-white border-b-2 border-[#e5e6e4] flex justify-between items-center">
       <div className="flex items-center">
@@ -29,16 +32,18 @@ const SearchBar = ({
           />
         )}
         {!imgQuerySrc && (
-          <div className="text-[#c5c7c3] text-xl leading-loose ml-2">
-            What are you looking for?
-          </div>
+          <InputForm
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
+          // <div className="text-[#c5c7c3] text-xl leading-loose ml-2">
+          //   What are you looking for?
+          // </div>
         )}
       </div>
       <div className="flex items-center gap-2">
         <div className="w-px h-6 bg-[#d9d9d9]" />
-        <SearchByImageButtonAndModal
-          onImageSelected={onImageSelected}
-        />
+        <SearchByImageButtonAndModal onImageSelected={onImageSelected} />
       </div>
     </div>
   );
