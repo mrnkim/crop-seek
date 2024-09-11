@@ -11,9 +11,12 @@ const SearchBar = ({
   setImgName,
   clearImageQuery,
   onImageSelected,
+  textSearchQuery,
+  setTextSearchQuery,
+  setTextSearchSubmitted,
+  handleChange,
+  handleSubmit
 }) => {
-  const [searchQuery, setSearchQuery] = useState("");
-
   return (
     <div className="w-full max-w-4xl h-14 py-3 bg-white border-b-2 border-[#e5e6e4] flex justify-between items-center">
       <div className="flex items-center">
@@ -33,8 +36,11 @@ const SearchBar = ({
         )}
         {!imgQuerySrc && (
           <TextInputForm
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
+            textSearchQuery={textSearchQuery}
+            setTextSearchQuery={setTextSearchQuery}
+            setTextSearchSubmitted={setTextSearchSubmitted}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
           />
           // <div className="text-[#c5c7c3] text-xl leading-loose ml-2">
           //   What are you looking for?

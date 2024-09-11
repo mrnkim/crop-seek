@@ -13,6 +13,10 @@ export default function Home() {
   const [updatedSearchData, setUpdatedSearchData] = useState([]);
   const [imgName, setImgName] = useState("");
   const [videoError, setVideoError] = useState(null);
+  const [textSearchQuery, setTextSearchQuery] = useState("");
+  console.log("🚀 > Home > textSearchQuery=", textSearchQuery);
+  const [textSearchSubmitted, setTextSearchSubmitted] = useState(false);
+  console.log("🚀 > Home > textSearchSubmitted=", textSearchSubmitted);
 
   const queryClient = useQueryClient();
 
@@ -49,9 +53,61 @@ export default function Home() {
     keepPreviousData: true,
   });
 
+  function handleChange(evt) {
+    const input = evt.target;
+    setTextSearchQuery(input.value);
+  }
+
+  async function handleSubmit(evt) {
+    evt.preventDefault();
+    setTextSearchSubmitted(true);
+  }
+
+  const fetchTextSearchResults = async (textSearchQuery) => {
+    console.log(
+      "🚀 > fetchTextSearchResults > textSearchQuery=",
+      textSearchQuery
+    );
+    const response = await fetch(`/api/textSearch`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ textSearchQuery }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Network response was not ok");
+    }
+
+    return response.json();
+  };
+
+  const {
+    data: textSearchResultData,
+    error: textSearchError,
+    isLoading: textSearchResultsLoading,
+  } = useQuery({
+    queryKey: ["textSearch", textSearchQuery],
+    queryFn: () => fetchTextSearchResults(textSearchQuery),
+    enabled: textSearchSubmitted,
+    keepPreviousData: true,
+    onSuccess: () => setTextSearchSubmitted(false), // Reset submission state after success
+  });
+  console.log(
+    "🚀 > Home > textSearchResultsLoading=",
+    textSearchResultsLoading
+  );
+  console.log("🚀 > Home > textSearchResultData=", textSearchResultData);
+
   useEffect(() => {
     queryClient.invalidateQueries(["search", imgQuerySrc]);
   }, [imgQuerySrc, queryClient]);
+
+  useEffect(() => {
+    queryClient.invalidateQueries(["textSearch", textSearchQuery]);
+  }, [textSearchSubmitted, queryClient]);
 
   const onImageSelected = async (src) => {
     setImgQuerySrc(null);
@@ -72,8 +128,10 @@ export default function Home() {
     setImgName("");
   };
 
-  if (videoError || searchError) {
-    return <ErrorFallback error={videoError || searchError} />;
+  if (videoError || searchError || textSearchError) {
+    return (
+      <ErrorFallback error={videoError || searchError || textSearchError} />
+    );
   }
 
   return (
@@ -90,16 +148,31 @@ export default function Home() {
           clearImageQuery={clearImageQuery}
           searchResultsLoading={searchResultsLoading}
           onImageSelected={onImageSelected}
+          textSearchQuery={textSearchQuery}
+          setTextSearchQuery={setTextSearchQuery}
+          setTextSearchSubmitted={setTextSearchSubmitted}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
         />
         {!searchResultData && !searchResultsLoading && (
           <Videos videoError={videoError} setVideoError={setVideoError} />
         )}
-        {searchResultsLoading && (
-          <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
-            <LoadingSpinner size="lg" color="primary" />
-          </div>
-        )}
+        {searchResultsLoading ||
+          (textSearchResultsLoading && (
+            <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
+              <LoadingSpinner size="lg" color="primary" />
+            </div>
+          ))}
         {searchResultData && !searchResultsLoading && (
+          <SearchResults
+            searchResultData={searchResultData}
+            updatedSearchData={updatedSearchData}
+            setUpdatedSearchData={setUpdatedSearchData}
+            imgQuerySrc={imgQuerySrc}
+            searchResultsLoading={searchResultsLoading}
+          />
+        )}
+        {textSearchResultData && !textSearchResultsLoading && (
           <SearchResults
             searchResultData={searchResultData}
             updatedSearchData={updatedSearchData}

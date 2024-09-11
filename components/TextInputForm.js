@@ -1,12 +1,13 @@
-import React from "react";
+import { React} from "react";
 
-const TextInputForm = ({ searchQuery, setSearchQuery }) => {
-  function handleChange(evt) {
-    const input = evt.target;
-    setSearchQuery(input.value);
-  }
+const TextInputForm = ({
+  textSearchQuery,
+  setTextSearchQuery,
+  setTextSearchSubmitted,
+  handleChange,
+  handleSubmit
+}) => {
 
-  function handleSubmit() {}
 
   return (
     <form
@@ -16,7 +17,7 @@ const TextInputForm = ({ searchQuery, setSearchQuery }) => {
       <input
         placeholder=" What are you looking for?"
         onChange={handleChange}
-        value={searchQuery}
+        value={textSearchQuery}
       ></input>
     </form>
   );
