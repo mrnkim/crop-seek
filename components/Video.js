@@ -32,8 +32,8 @@ const Video = ({ video }) => {
     error,
     isLoading,
   } = useQuery({
-    queryKey: ["videoDetail", video._id],
-    queryFn: () => fetchVideoDetail(video._id),
+    queryKey: ["videoDetail", video._id || video.videoId],
+    queryFn: () => fetchVideoDetail(video._id || video.videoId),
     staleTime: 600000,
     cacheTime: 900000,
   });
@@ -56,7 +56,10 @@ const Video = ({ video }) => {
             height="100%"
             light={
               <img
-                src={videoDetail?.hls?.thumbnail_urls[0]}
+                src={
+                  videoDetail?.hls?.thumbnail_urls[0] ||
+                  videoDetail?.hls?.thumbnailUrls[0]
+                }
                 className="object-contain w-full h-full"
                 alt="thumbnail"
               />

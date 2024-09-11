@@ -22,7 +22,7 @@ const SearchResults = ({
           <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
             <LoadingSpinner size="lg" color="primary" />
           </div>
-        ) : searchResultData?.pageInfo?.total_results > 0 ? (
+        ) : searchResultData?.pageInfo?.total_results || searchResultData?.pageInfo?.totalResults > 0 ? (
           <>
             <div className={clsx("flex", "items-center", "mt-5", "mb-5")}>
               <p className="text-subtitle2 font-medium whitespace-nowrap overflow-hidden text-ellipsis">
@@ -37,9 +37,9 @@ const SearchResults = ({
                 )}
               >
                 <span> • </span>
-                {updatedSearchData?.pageInfo?.total_results}
+                {updatedSearchData?.pageInfo?.total_results || updatedSearchData?.pageInfo?.totalResults}
                 {"  "}
-                {updatedSearchData?.pageInfo?.total_results > 1
+                {updatedSearchData?.pageInfo?.total_results || updatedSearchData?.pageInfo?.totalResults > 1
                   ? " matches"
                   : " match"}{" "}
               </p>

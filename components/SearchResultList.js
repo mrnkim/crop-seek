@@ -32,7 +32,7 @@ const SearchResultList = ({
       }
 
       const { pageInfo, searchData } = await response.json();
-      setNextPageToken(pageInfo.next_page_token || null);
+      setNextPageToken(pageInfo.next_page_token || pageInfo.nextPageToken || null);
       return { pageInfo, searchData };
     } catch (error) {
       console.error("Error getting next search results", error);
@@ -47,7 +47,7 @@ const SearchResultList = ({
       const updatedData = await Promise.all(
         data.map(async (clip) => {
           const response = await fetch(
-            `/api/getVideo?videoId=${clip.video_id}`
+            `/api/getVideo?videoId=${clip.video_id || clip.videoId}`
           );
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -71,13 +71,13 @@ const SearchResultList = ({
         setError(null);
         try {
           const updatedData = await fetchVideoDetails(
-            searchResultData.searchData
+            searchResultData.searchData || searchResultData.textSearchResults
           );
           setUpdatedSearchData({
             ...searchResultData,
             searchData: updatedData,
           });
-          setNextPageToken(searchResultData.pageInfo.next_page_token);
+          setNextPageToken(searchResultData.pageInfo.next_page_token || searchResultData.pageInfo.nextPageToken );
         } catch (error) {
           setError(error.message);
         } finally {
@@ -180,7 +180,7 @@ const SearchResultList = ({
                     }
                     light={
                       <img
-                        src={clip.thumbnail_url}
+                        src={clip.thumbnail_url || clip.thumbnailUrl}
                         width="100%"
                         height="100%"
                         alt="thumbnail"
