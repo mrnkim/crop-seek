@@ -14,7 +14,7 @@ export async function GET(req) {
     );
   }
 
-  const url = `https://api.twelvelabs.io/tl/playground/samples/v1.2/indexes/${indexId}/videos/${videoId}`;
+  const url = `https://api.twelvelabs.io/v1.2/indexes/${indexId}/videos/${videoId}`;
 
   const options = {
     method: "GET",

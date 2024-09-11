@@ -18,7 +18,7 @@ export async function GET(req) {
     return NextResponse.json({ error: "API key is not set" }, { status: 500 });
   }
 
-  const url = `https://api.twelvelabs.io/tl/playground/samples/v1.2/search-v2/${pageToken}`;
+  const url = `https://api.twelvelabs.io/v1.2/search-v2/${pageToken}`;
 
   try {
     const response = await axios.get(url, {
