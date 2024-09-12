@@ -43,8 +43,7 @@ export async function POST(request) {
     }
 
     const formDataHeaders = searchDataForm.getHeaders();
-    const url =
-      "https://api.twelvelabs.io/tl/playground/samples/v1.2/search-v2";
+    const url = "https://api.twelvelabs.io/v1.2/search-v2";
 
     const response = await axios.post(url, searchDataForm, {
       headers: {
