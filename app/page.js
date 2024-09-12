@@ -14,9 +14,7 @@ export default function Home() {
   const [imgName, setImgName] = useState("");
   const [videoError, setVideoError] = useState(null);
   const [textSearchQuery, setTextSearchQuery] = useState("");
-  console.log("🚀 > Home > textSearchQuery=", textSearchQuery);
   const [textSearchSubmitted, setTextSearchSubmitted] = useState(false);
-  console.log("🚀 > Home > textSearchSubmitted=", textSearchSubmitted);
 
   const queryClient = useQueryClient();
 
@@ -53,21 +51,12 @@ export default function Home() {
     keepPreviousData: true,
   });
 
-  function handleChange(evt) {
-    const input = evt.target;
-    setTextSearchQuery(input.value);
-  }
-
-  async function handleSubmit(evt) {
-    evt.preventDefault();
+  async function handleSubmit(textInputValue) {
+    setTextSearchQuery(textInputValue);
     setTextSearchSubmitted(true);
   }
 
   const fetchTextSearchResults = async (textSearchQuery) => {
-    console.log(
-      "🚀 > fetchTextSearchResults > textSearchQuery=",
-      textSearchQuery
-    );
     const response = await fetch(`/api/textSearch`, {
       method: "POST",
       headers: {
@@ -93,20 +82,22 @@ export default function Home() {
     queryFn: () => fetchTextSearchResults(textSearchQuery),
     enabled: textSearchSubmitted,
     keepPreviousData: true,
-    onSuccess: () => setTextSearchSubmitted(false), // Reset submission state after success
+    onSuccess: () => {
+      setTextSearchSubmitted(false); // Reset state to prevent unintended searches
+    },
+    onError: () => {
+      setTextSearchSubmitted(false); // Reset state even on error to prevent looping
+    },
   });
-  console.log(
-    "🚀 > Home > textSearchResultsLoading=",
-    textSearchResultsLoading
-  );
-  console.log("🚀 > Home > textSearchResultData=", textSearchResultData);
 
   useEffect(() => {
     queryClient.invalidateQueries(["search", imgQuerySrc]);
   }, [imgQuerySrc, queryClient]);
 
   useEffect(() => {
-    queryClient.invalidateQueries(["textSearch", textSearchQuery]);
+    if (textSearchSubmitted) {
+      queryClient.invalidateQueries(["textSearch"]);
+    }
   }, [textSearchSubmitted, queryClient]);
 
   const onImageSelected = async (src) => {
@@ -151,18 +142,19 @@ export default function Home() {
           textSearchQuery={textSearchQuery}
           setTextSearchQuery={setTextSearchQuery}
           setTextSearchSubmitted={setTextSearchSubmitted}
-          handleChange={handleChange}
           handleSubmit={handleSubmit}
         />
-        {!searchResultData && !searchResultsLoading && (
-          <Videos videoError={videoError} setVideoError={setVideoError} />
+        {!searchResultData &&
+          !searchResultsLoading &&
+          !textSearchResultData &&
+          !textSearchResultsLoading && (
+            <Videos videoError={videoError} setVideoError={setVideoError} />
+          )}
+        {(searchResultsLoading || textSearchResultsLoading) && (
+          <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
+            <LoadingSpinner size="lg" color="primary" />
+          </div>
         )}
-        {searchResultsLoading ||
-          (textSearchResultsLoading && (
-            <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
-              <LoadingSpinner size="lg" color="primary" />
-            </div>
-          ))}
         {searchResultData && !searchResultsLoading && (
           <SearchResults
             searchResultData={searchResultData}
@@ -174,11 +166,11 @@ export default function Home() {
         )}
         {textSearchResultData && !textSearchResultsLoading && (
           <SearchResults
-            searchResultData={searchResultData}
+            searchResultData={textSearchResultData}
             updatedSearchData={updatedSearchData}
             setUpdatedSearchData={setUpdatedSearchData}
-            imgQuerySrc={imgQuerySrc}
-            searchResultsLoading={searchResultsLoading}
+            imgQuerySrc={textSearchSubmitted}
+            searchResultsLoading={textSearchResultsLoading}
           />
         )}
       </div>

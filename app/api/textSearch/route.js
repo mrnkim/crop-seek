@@ -22,7 +22,6 @@ export async function POST(request) {
 
     // Parse the incoming request to get the queryText
     const { textSearchQuery } = await request.json();
-    console.log("🚀 > POST > textSearchQuery=", textSearchQuery);
 
     // Check if textSearchQuery is missing in the request
     if (!textSearchQuery) {
@@ -50,11 +49,6 @@ export async function POST(request) {
         { status: 500 }
       );
     }
-
-    console.log("🚀 > POST > { pageInfo, textSearchResults }=", {
-      pageInfo: response.pageInfo || {},
-      textSearchResults,
-    });
 
     // Return the search results as a JSON response
     return NextResponse.json({

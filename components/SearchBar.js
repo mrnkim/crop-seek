@@ -14,7 +14,6 @@ const SearchBar = ({
   textSearchQuery,
   setTextSearchQuery,
   setTextSearchSubmitted,
-  handleChange,
   handleSubmit
 }) => {
   return (
@@ -36,10 +35,7 @@ const SearchBar = ({
         )}
         {!imgQuerySrc && (
           <TextInputForm
-            textSearchQuery={textSearchQuery}
-            setTextSearchQuery={setTextSearchQuery}
             setTextSearchSubmitted={setTextSearchSubmitted}
-            handleChange={handleChange}
             handleSubmit={handleSubmit}
           />
           // <div className="text-[#c5c7c3] text-xl leading-loose ml-2">
