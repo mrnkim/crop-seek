@@ -1,8 +1,9 @@
 "use client";
-import { React, useState } from "react";
+import React, { useRef } from "react";
 import SearchByImageButtonAndModal from "./SearchByImageButtonAndModal";
 import SelectedImageDisplay from "./SelectedImageDisplay";
-import TextInputForm from "./TextInputForm";
+import { IconButton, Popper, Skeleton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 const SearchBar = ({
   imgQuerySrc,
@@ -11,18 +12,32 @@ const SearchBar = ({
   setImgName,
   clearImageQuery,
   onImageSelected,
-  textSearchQuery,
+  handleSubmit,
   setTextSearchQuery,
   setTextSearchSubmitted,
-  handleSubmit
 }) => {
+  const inputRef = useRef(null);
+
+  const handleFormSubmit = (evt) => {
+    evt.preventDefault(); // Prevent the default form submission
+    handleSubmit(inputRef.current.value); // Pass the input value directly
+  };
+
+  const onClear = () => {
+    if (inputRef.current) {
+      inputRef.current.value = "";
+      setTextSearchQuery("");
+      setTextSearchSubmitted(false);
+    }
+  };
+
   return (
-    <div className="w-full max-w-4xl h-14 py-3 bg-white border-b-2 border-[#e5e6e4] flex justify-between items-center">
-      <div className="flex items-center">
+    <div className="w-full h-14 py-3 bg-white border-b-2 border-[#e5e6e4] flex items-center justify-between">
+      <div className="flex items-center flex-grow">
         <div className="w-8 h-14 flex items-center gap-1 ml-4">
-          <div className="w-6 h-6">
+          <button className="w-6 h-6" onClick={handleFormSubmit}>
             <img src="/SearchVideoLeft.svg" alt="Search Icon" />
-          </div>
+          </button>
         </div>
         {imgQuerySrc && (
           <SelectedImageDisplay
@@ -34,18 +49,28 @@ const SearchBar = ({
           />
         )}
         {!imgQuerySrc && (
-          <TextInputForm
-            setTextSearchSubmitted={setTextSearchSubmitted}
-            handleSubmit={handleSubmit}
-          />
-          // <div className="text-[#c5c7c3] text-xl leading-loose ml-2">
-          //   What are you looking for?
-          // </div>
+          <form
+            className="flex-grow flex items-center"
+            onSubmit={handleFormSubmit}
+          >
+            <input
+              className="text-[#c5c7c3] text-xl leading-loose w-full"
+              ref={inputRef} // Use ref to access the input
+              placeholder=" What are you looking for?"
+            ></input>
+          </form>
         )}
       </div>
-      <div className="flex items-center gap-2">
-        <div className="w-px h-6 bg-[#d9d9d9]" />
-        <SearchByImageButtonAndModal onImageSelected={onImageSelected} />
+      <div className="flex items-center">
+        {inputRef.current?.value && (
+          <IconButton className="text-grey-500 mr-1" size="medium" onClick={onClear}>
+            <CloseIcon color="inherit" fontSize="inherit" />
+          </IconButton>
+        )}
+        <div className="flex items-center gap-2">
+          <div className="w-px h-6 bg-[#d9d9d9]" />
+          <SearchByImageButtonAndModal onImageSelected={onImageSelected} />
+        </div>
       </div>
     </div>
   );
