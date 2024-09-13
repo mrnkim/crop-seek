@@ -59,9 +59,6 @@ export default function Home() {
   const fetchTextSearchResults = async (textSearchQuery) => {
     const response = await fetch(`/api/textSearch`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({ textSearchQuery }),
     });
 

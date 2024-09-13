@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { TwelveLabs } from "twelvelabs-js";
+import axios from "axios";
+import FormData from "form-data";
 
 export const runtime = "nodejs";
 
 export async function POST(request) {
   try {
-    // Ensure environment variables are correctly loaded
     const apiKey = process.env.TWELVELABS_API_KEY;
     const indexId = process.env.TWELVELABS_INDEX_ID;
 
-    // Check if API key or Index ID is missing
     if (!apiKey || !indexId) {
       return NextResponse.json(
         { error: "API key or Index ID is not set" },
@@ -17,51 +16,44 @@ export async function POST(request) {
       );
     }
 
-    // Initialize the TwelveLabs client
-    const client = new TwelveLabs({ apiKey });
-
-    // Parse the incoming request to get the queryText
     const { textSearchQuery } = await request.json();
 
-    // Check if textSearchQuery is missing in the request
-    if (!textSearchQuery) {
-      return NextResponse.json(
-        { error: "Query text is missing in the request body" },
-        { status: 400 }
-      );
-    }
+    const searchDataForm = new FormData();
+    searchDataForm.append("search_options", "visual");
+    searchDataForm.append("search_options", "conversation");
+    searchDataForm.append("search_options", "text_in_video");
+    searchDataForm.append("search_options", "logo");
+    searchDataForm.append("index_id", indexId);
+    searchDataForm.append("query_text", textSearchQuery);
 
-    // Make the search query with provided options
-    const response = await client.search.query({
-      indexId: "663c310ae06d1c2c0212ce10", //TODO:
-      queryText: textSearchQuery,
-      options: ["conversation", "text_in_video", "visual", "logo"],
-      operator: "or",
+    const url = "https://api.twelvelabs.io/v1.2/search-v2";
+
+    const response = await axios.post(url, searchDataForm, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "x-api-key": `${apiKey}`,
+      },
     });
 
-    // Extract search results from the response
-    const textSearchResults = response.data;
+    const responseData = response.data;
 
-    // Check if search results are structured as expected
-    if (!textSearchResults) {
+    if (!responseData) {
       return NextResponse.json(
-        { error: "Unexpected response structure from search query" },
+        { error: "Error getting response from the API" },
         { status: 500 }
       );
     }
 
     // Return the search results as a JSON response
     return NextResponse.json({
-      pageInfo: response.pageInfo || {},
-      textSearchResults,
+      pageInfo: responseData.page_info || {},
+      textSearchResults: responseData.data ,
     });
   } catch (error) {
-    // Handle errors and log them appropriately
     console.error("Error in POST handler:", error?.response?.data || error);
     const status = error?.response?.status || 500;
     const message = error?.response?.data?.message || error.message;
 
-    // Return the error response
     return NextResponse.json({ error: message }, { status });
   }
 }

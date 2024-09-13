@@ -57,7 +57,7 @@ export async function POST(request) {
 
     if (!imageResult || !imageResult.data) {
       return NextResponse.json(
-        { error: "Unexpected response structure from search query" },
+        { error: "Error getting response from the API" },
         { status: 500 }
       );
     }
