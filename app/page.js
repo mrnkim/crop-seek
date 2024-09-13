@@ -152,24 +152,19 @@ export default function Home() {
             <LoadingSpinner size="lg" color="primary" />
           </div>
         )}
-        {searchResultData && !searchResultsLoading && (
-          <SearchResults
-            searchResultData={searchResultData}
-            updatedSearchData={updatedSearchData}
-            setUpdatedSearchData={setUpdatedSearchData}
-            imgQuerySrc={imgQuerySrc}
-            searchResultsLoading={searchResultsLoading}
-          />
-        )}
-        {textSearchResultData && !textSearchResultsLoading && (
-          <SearchResults
-            searchResultData={textSearchResultData}
-            updatedSearchData={updatedSearchData}
-            setUpdatedSearchData={setUpdatedSearchData}
-            imgQuerySrc={textSearchSubmitted}
-            searchResultsLoading={textSearchResultsLoading}
-          />
-        )}
+        {!searchResultsLoading &&
+          !textSearchResultsLoading &&
+          (searchResultData || textSearchResultData) && (
+            <SearchResults
+              searchResultData={searchResultData || textSearchResultData}
+              updatedSearchData={updatedSearchData}
+              setUpdatedSearchData={setUpdatedSearchData}
+              imgQuerySrc={imgQuerySrc || textSearchSubmitted}
+              searchResultsLoading={
+                searchResultsLoading || textSearchResultsLoading
+              }
+            />
+          )}
       </div>
     </main>
   );
