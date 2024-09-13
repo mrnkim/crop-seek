@@ -12,7 +12,7 @@ const SearchResults = ({
   searchResultData,
   updatedSearchData,
   setUpdatedSearchData,
-  imgQuerySrc,
+  querySrc,
   searchResultsLoading,
 }) => {
   return (
@@ -49,7 +49,7 @@ const SearchResults = ({
               searchResultData={searchResultData}
               updatedSearchData={updatedSearchData}
               setUpdatedSearchData={setUpdatedSearchData}
-              imgQuerySrc={imgQuerySrc}
+              querySrc={querySrc}
             />
           </>
         ) : (

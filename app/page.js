@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function Home() {
-  const [imgQuerySrc, setImgQuerySrc] = useState("");
+  const [querySrc, setQuerySrc] = useState("");
   const [updatedSearchData, setUpdatedSearchData] = useState([]);
   const [imgName, setImgName] = useState("");
   const [videoError, setVideoError] = useState(null);
@@ -46,8 +46,8 @@ export default function Home() {
     isLoading: searchResultsLoading,
   } = useQuery({
     queryKey: ["search", imgName],
-    queryFn: () => fetchSearchResults(imgQuerySrc),
-    enabled: !!imgQuerySrc,
+    queryFn: () => fetchSearchResults(querySrc),
+    enabled: !!querySrc,
     keepPreviousData: true,
   });
 
@@ -88,8 +88,8 @@ export default function Home() {
   });
 
   useEffect(() => {
-    queryClient.invalidateQueries(["search", imgQuerySrc]);
-  }, [imgQuerySrc, queryClient]);
+    queryClient.invalidateQueries(["search", querySrc]);
+  }, [querySrc, queryClient]);
 
   useEffect(() => {
     if (textSearchSubmitted) {
@@ -98,20 +98,20 @@ export default function Home() {
   }, [textSearchSubmitted, queryClient]);
 
   const onImageSelected = async (src) => {
-    setImgQuerySrc(null);
+    setQuerySrc(null);
     setUpdatedSearchData([]);
 
     if (typeof src === "string") {
-      setImgQuerySrc(src);
+      setQuerySrc(src);
       setImgName(src.split("/").pop());
     } else if (src instanceof File) {
-      setImgQuerySrc(src);
+      setQuerySrc(src);
       setImgName(src.name);
     }
   };
 
   const clearImageQuery = () => {
-    setImgQuerySrc("");
+    setQuerySrc("");
     setUpdatedSearchData([]);
     setImgName("");
   };
@@ -126,8 +126,8 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="w-full max-w-4xl">
         <SearchBar
-          imgQuerySrc={imgQuerySrc}
-          setImgQuerySrc={setImgQuerySrc}
+          querySrc={querySrc}
+          setQuerySrc={setQuerySrc}
           searchResultData={searchResultData}
           updatedSearchData={updatedSearchData}
           setUpdatedSearchData={setUpdatedSearchData}
@@ -159,7 +159,7 @@ export default function Home() {
               searchResultData={searchResultData || textSearchResultData}
               updatedSearchData={updatedSearchData}
               setUpdatedSearchData={setUpdatedSearchData}
-              imgQuerySrc={imgQuerySrc || textSearchSubmitted}
+              querySrc={querySrc || textSearchSubmitted}
               searchResultsLoading={
                 searchResultsLoading || textSearchResultsLoading
               }

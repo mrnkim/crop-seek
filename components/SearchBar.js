@@ -6,8 +6,8 @@ import { IconButton, Popper, Skeleton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 const SearchBar = ({
-  imgQuerySrc,
-  setImgQuerySrc,
+  querySrc,
+  setQuerySrc,
   imgName,
   setImgName,
   clearImageQuery,
@@ -39,16 +39,16 @@ const SearchBar = ({
             <img src="/SearchVideoLeft.svg" alt="Search Icon" />
           </button>
         </div>
-        {imgQuerySrc && (
+        {querySrc && (
           <SelectedImageDisplay
-            imgQuerySrc={imgQuerySrc}
-            setImgQuerySrc={setImgQuerySrc}
+            querySrc={querySrc}
+            setQuerySrc={setQuerySrc}
             imgName={imgName}
             setImgName={setImgName}
             unselectImage={clearImageQuery}
           />
         )}
-        {!imgQuerySrc && (
+        {!querySrc && (
           <form
             className="flex-grow flex items-center"
             onSubmit={handleFormSubmit}

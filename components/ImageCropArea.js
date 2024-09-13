@@ -17,7 +17,7 @@ const ImageCropArea = ({
   closeDisplayModal,
   imgName,
   imageSrc,
-  setImgQuerySrc,
+  setQuerySrc,
   setImgName,
 }) => {
   const [crop, setCrop] = useState({});
@@ -96,7 +96,7 @@ const ImageCropArea = ({
         );
 
         if (croppedImageFile) {
-          setImgQuerySrc(croppedImageFile);
+          setQuerySrc(croppedImageFile);
           setImgName(croppedImageFile.name);
           closeDisplayModal();
         }
