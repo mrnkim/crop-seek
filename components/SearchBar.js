@@ -3,8 +3,8 @@ import React, { useRef } from "react";
 import SearchByImageButtonAndModal from "./SearchByImageButtonAndModal";
 import SelectedImageDisplay from "./SelectedImageDisplay";
 import { IconButton, Popper, Skeleton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import TextSearchForm from "./TextSearchForm";
+import CustomCloseIcon from "./CustomCloseIcon"
 
 const SearchBar = ({
   querySrc,
@@ -58,13 +58,7 @@ const SearchBar = ({
       </div>
       <div className="flex items-center">
         {inputRef.current?.value && (
-          <IconButton
-            className="text-grey-500 mr-1"
-            size="medium"
-            onClick={onClear}
-          >
-            <CloseIcon color="inherit" fontSize="inherit" />
-          </IconButton>
+          <CustomCloseIcon className="text-grey-500 mr-1" onClick={onClear}/>
         )}
         <div className="flex items-center gap-2">
           <div className="w-px h-6 bg-[#d9d9d9]" />

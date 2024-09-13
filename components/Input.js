@@ -1,6 +1,6 @@
-import CloseIcon from "@mui/icons-material/Close";
-import clsx from "clsx";
 import React from "react";
+import clsx from "clsx";
+import CustomCloseIcon from "./CustomCloseIcon";
 
 const Input = ({
   className,
@@ -40,25 +40,15 @@ const Input = ({
             "disabled:bg-grey-200",
             "disabled:border-transparent",
             error && "!border-red-500",
-            fullWidth && "w-full" 
+            fullWidth && "w-full"
           )}
           value={value}
         />
         {showClearButton && (
-          <button
-            className={clsx(
-              "p-0",
-              "absolute right-2 top-1/2 -translate-y-1/2",
-              "border-none",
-              "bg-transparent",
-              "cursor-pointer"
-            )}
-            type="button"
-            aria-label="Clear"
+          <CustomCloseIcon
+            className="p-0 absolute right-2 top-1/2 -translate-y-1/2 border-none bg-transparent cursor-pointer"
             onClick={onClear}
-          >
-            <CloseIcon className="text-grey-500" fontSize="small" />
-          </button>
+          />
         )}
       </div>
       {helperText && (

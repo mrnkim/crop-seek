@@ -1,5 +1,5 @@
 import { React, useState, useRef, useEffect } from "react";
-import CloseIcon from "@mui/icons-material/Close";
+import CustomCloseIcon from "./CustomCloseIcon";
 import {
   Dialog,
   DialogContent,
@@ -123,12 +123,7 @@ const ImageCropArea = ({
     >
       <DialogTitle className="w-[calc(100%-30px)] truncate">
         {imgName}
-        <IconButton
-          className="absolute right-3 top-3"
-          onClick={closeDisplayModal}
-        >
-          <CloseIcon className="text-grey-500" />
-        </IconButton>
+      <CustomCloseIcon onClick={closeDisplayModal}/>
       </DialogTitle>
       <DialogContent>
         <div

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import CloseIcon from "@mui/icons-material/Close";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import { Dialog, DialogContent, DialogTitle, IconButton } from "@mui/material";
 import Button from "./Button";
 import clsx from "clsx";
+import CustomCloseIcon from "./CustomCloseIcon"
 
 const LimitsOfSearchByImageButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,9 +24,7 @@ const LimitsOfSearchByImageButton = () => {
       <Dialog fullWidth open={isModalOpen} onClose={closeModal}>
         <DialogTitle>
           Limitations of Search by image
-          <IconButton className="absolute right-3 top-3" onClick={closeModal}>
-            <CloseIcon className="text-grey-500" />
-          </IconButton>
+         <CustomCloseIcon onClick={closeModal}/>
         </DialogTitle>
         <DialogContent>
           <ol className="mb-2 ml-[18px]">

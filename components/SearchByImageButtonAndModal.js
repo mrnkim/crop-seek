@@ -9,6 +9,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import ImageDropzoneHelperText from "./ImageDropzoneHelperText";
+import CustomCloseIcon from "./CustomCloseIcon";
 
 const acceptedImageTypes = {
   "image/jpeg": [".jpeg", ".jpg"],
@@ -100,9 +101,7 @@ const SearchByImageButtonAndModal = ({ onImageSelected }) => {
       <Dialog fullWidth open={isModalOpen} onClose={closeModal} maxWidth="xs">
         <DialogTitle className="relative text-grey-1000 text-subtitle2-bold font-aeonik">
           Upload image
-          <IconButton className="absolute right-3 top-3" onClick={closeModal}>
-            <CloseIcon className="text-grey-500" />
-          </IconButton>
+          <CustomCloseIcon onClick={closeModal}/>
         </DialogTitle>
         <DialogContent>
           {errorCode && (
