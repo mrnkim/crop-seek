@@ -4,6 +4,7 @@ import SearchByImageButtonAndModal from "./SearchByImageButtonAndModal";
 import SelectedImageDisplay from "./SelectedImageDisplay";
 import { IconButton, Popper, Skeleton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import TextSearchForm from "./TextSearchForm";
 
 const SearchBar = ({
   querySrc,
@@ -49,21 +50,19 @@ const SearchBar = ({
           />
         )}
         {!querySrc && (
-          <form
-            className="flex-grow flex items-center"
-            onSubmit={handleFormSubmit}
-          >
-            <input
-              className="text-[#c5c7c3] text-xl leading-loose w-full"
-              ref={inputRef} // Use ref to access the input
-              placeholder=" What are you looking for?"
-            ></input>
-          </form>
+          <TextSearchForm
+            handleFormSubmit={handleFormSubmit}
+            inputRef={inputRef}
+          />
         )}
       </div>
       <div className="flex items-center">
         {inputRef.current?.value && (
-          <IconButton className="text-grey-500 mr-1" size="medium" onClick={onClear}>
+          <IconButton
+            className="text-grey-500 mr-1"
+            size="medium"
+            onClick={onClear}
+          >
             <CloseIcon color="inherit" fontSize="inherit" />
           </IconButton>
         )}
