@@ -32,7 +32,9 @@ const getErrorMessage = (code) => {
   }
 };
 
-const SearchByImageButtonAndModal = ({ onImageSelected }) => {
+const SearchByImageButtonAndModal = ({
+  onImageSelected,
+}) => {
   const [imageUrlFromInput, setImageUrlFromInput] = useState("");
   const [errorCode, setErrorCode] = useState();
   const [isHovering, setIsHovering] = useState(false);
@@ -64,7 +66,6 @@ const SearchByImageButtonAndModal = ({ onImageSelected }) => {
   const handleImageUrl = () => {
     try {
       const trimmedUrl = imageUrlFromInput.trim();
-      const url = new URL(trimmedUrl);
       const isImage =
         /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(trimmedUrl) ||
         /f=image|f=auto/.test(trimmedUrl);
@@ -101,7 +102,7 @@ const SearchByImageButtonAndModal = ({ onImageSelected }) => {
       <Dialog fullWidth open={isModalOpen} onClose={closeModal} maxWidth="xs">
         <DialogTitle className="relative text-grey-1000 text-subtitle2-bold font-aeonik">
           Upload image
-          <CustomCloseIcon onClick={closeModal}/>
+          <CustomCloseIcon onClick={closeModal} />
         </DialogTitle>
         <DialogContent>
           {errorCode && (

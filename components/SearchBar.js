@@ -15,20 +15,20 @@ const SearchBar = ({
   onImageSelected,
   handleSubmit,
   setTextSearchQuery,
-  setTextSearchSubmitted,
 }) => {
   const inputRef = useRef(null);
 
   const handleFormSubmit = (evt) => {
-    evt.preventDefault(); // Prevent the default form submission
-    handleSubmit(inputRef.current.value); // Pass the input value directly
+    evt.preventDefault();
+    if (inputRef.current.value.length > 0) {
+    handleSubmit(inputRef.current.value);
+  }
   };
 
   const onClear = () => {
     if (inputRef.current) {
       inputRef.current.value = "";
       setTextSearchQuery("");
-      setTextSearchSubmitted(false);
     }
   };
 
