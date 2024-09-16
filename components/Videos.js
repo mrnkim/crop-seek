@@ -1,10 +1,11 @@
-"use client";
-import React from "react";
+import React, { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import clsx from "clsx";
 import { useQuery } from "@tanstack/react-query";
 import PageNav from "./PageNav";
-import VideoList from "./VideoList";
+import Video from "./Video";
 import LoadingSpinner from "./LoadingSpinner";
+import ErrorFallback from "./ErrorFallback";
 
 const fetchIndex = async () => {
   const response = await fetch(`/api/getIndex`);
@@ -92,12 +93,15 @@ const Videos = ({ videoError, setVideoError }) => {
         </div>
       ) : (
         <>
-          <VideoList
-            videos={videosData?.data}
-            page={page}
-            setVideoError={setVideoError}
-            isVideosLoading={isVideosLoading}
-          />
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <Suspense fallback={<LoadingSpinner />}>
+              <div className="flex flex-wrap -mx-2">
+                {videosData?.data?.map((video) => (
+                  <Video key={video._id} video={video} />
+                ))}
+              </div>
+            </Suspense>
+          </ErrorBoundary>
           {totalPage > 1 && (
             <div className={clsx("w-full", "flex", "justify-center", "mt-8")}>
               <PageNav page={page} setPage={setPage} totalPage={totalPage} />

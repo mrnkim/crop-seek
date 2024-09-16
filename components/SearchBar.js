@@ -4,14 +4,14 @@ import SearchByImageButtonAndModal from "./SearchByImageButtonAndModal";
 import SelectedImageDisplay from "./SelectedImageDisplay";
 import { IconButton, Popper, Skeleton } from "@mui/material";
 import TextSearchForm from "./TextSearchForm";
-import CustomCloseIcon from "./CustomCloseIcon"
+import CustomCloseIcon from "./CustomCloseIcon";
 
 const SearchBar = ({
   querySrc,
   setQuerySrc,
   imgName,
   setImgName,
-  clearImageQuery,
+  clearQueryAndResults,
   onImageSelected,
   handleSubmit,
   setTextSearchQuery,
@@ -46,7 +46,7 @@ const SearchBar = ({
             setQuerySrc={setQuerySrc}
             imgName={imgName}
             setImgName={setImgName}
-            unselectImage={clearImageQuery}
+            unselectImage={clearQueryAndResults}
           />
         )}
         {!querySrc && (
@@ -58,7 +58,7 @@ const SearchBar = ({
       </div>
       <div className="flex items-center">
         {inputRef.current?.value && (
-          <CustomCloseIcon className="text-grey-500 mr-1" onClick={onClear}/>
+          <CustomCloseIcon className="text-grey-500 mr-1" onClick={onClear} />
         )}
         <div className="flex items-center gap-2">
           <div className="w-px h-6 bg-[#d9d9d9]" />

@@ -18,7 +18,8 @@ export default function Home() {
 
   const queryClient = useQueryClient();
 
-  const fetchSearchResults = async (imagePath) => {
+  /** Make request to server to fetch image search results */
+  const fetchImgSearchResults = async (imagePath) => {
     const formData = new FormData();
 
     if (imagePath instanceof File) {
@@ -27,7 +28,7 @@ export default function Home() {
       formData.append("query", imagePath);
     }
 
-    const response = await fetch("/api/search", {
+    const response = await fetch("/api/imgSearch", {
       method: "POST",
       body: formData,
     });
@@ -40,22 +41,25 @@ export default function Home() {
     return response.json();
   };
 
+  /** useQuery to fetch image search results  */
   const {
     data: searchResultData,
     error: searchError,
     isLoading: searchResultsLoading,
   } = useQuery({
     queryKey: ["search", imgName],
-    queryFn: () => fetchSearchResults(querySrc),
+    queryFn: () => fetchImgSearchResults(querySrc),
     enabled: !!querySrc,
     keepPreviousData: true,
   });
 
+  /** Set text search query as input value and status */
   async function handleSubmit(textInputValue) {
     setTextSearchQuery(textInputValue);
     setTextSearchSubmitted(true);
   }
 
+  /** Make request to server to fetch text search results */
   const fetchTextSearchResults = async (textSearchQuery) => {
     const response = await fetch(`/api/textSearch`, {
       method: "POST",
@@ -70,6 +74,7 @@ export default function Home() {
     return response.json();
   };
 
+  /** useQuery to fetch text search results  */
   const {
     data: textSearchResultData,
     error: textSearchError,
@@ -80,41 +85,45 @@ export default function Home() {
     enabled: textSearchSubmitted,
     keepPreviousData: true,
     onSuccess: () => {
-      setTextSearchSubmitted(false); // Reset state to prevent unintended searches
+      setTextSearchSubmitted(false);
     },
     onError: () => {
-      setTextSearchSubmitted(false); // Reset state even on error to prevent looping
+      setTextSearchSubmitted(false);
     },
   });
 
-  useEffect(() => {
-    queryClient.invalidateQueries(["search", querySrc]);
-  }, [querySrc, queryClient]);
-
-  useEffect(() => {
-    if (textSearchSubmitted) {
-      queryClient.invalidateQueries(["textSearch"]);
-    }
-  }, [textSearchSubmitted, queryClient]);
-
+  /** Set image name and query src  */
   const onImageSelected = async (src) => {
     setQuerySrc(null);
     setUpdatedSearchData([]);
 
     if (typeof src === "string") {
-      setQuerySrc(src);
       setImgName(src.split("/").pop());
     } else if (src instanceof File) {
-      setQuerySrc(src);
       setImgName(src.name);
     }
+
+    setQuerySrc(src);
   };
 
-  const clearImageQuery = () => {
+/** Clear query and results  */
+  const clearQueryAndResults = () => {
     setQuerySrc("");
     setUpdatedSearchData([]);
     setImgName("");
   };
+
+/** Invalidate queries of image search */
+  useEffect(() => {
+    queryClient.invalidateQueries(["imgSearch", querySrc]);
+  }, [querySrc, queryClient]);
+
+/** Invalidate queries of text search */
+  useEffect(() => {
+    if (textSearchSubmitted) {
+      queryClient.invalidateQueries(["textSearch"]);
+    }
+  }, [textSearchSubmitted, queryClient]);
 
   if (videoError || searchError || textSearchError) {
     return (
@@ -133,7 +142,7 @@ export default function Home() {
           setUpdatedSearchData={setUpdatedSearchData}
           imgName={imgName}
           setImgName={setImgName}
-          clearImageQuery={clearImageQuery}
+          clearQueryAndResults={clearQueryAndResults}
           searchResultsLoading={searchResultsLoading}
           onImageSelected={onImageSelected}
           textSearchQuery={textSearchQuery}
