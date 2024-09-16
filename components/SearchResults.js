@@ -14,7 +14,7 @@ const SearchResults = ({
   // imgSearchResultData,
   updatedSearchData,
   setUpdatedSearchData,
-  querySrc,
+  imgQuery,
   // imgSearchResultLoading,
   textSearchQuery,
   textSearchSubmitted,
@@ -47,12 +47,12 @@ const SearchResults = ({
 
   /** useQuery to fetch image search results  */
   const { data: imgSearchResultData, isLoading: imgSearchResultLoading } =
-    useQuery({
-      queryKey: ["imgSearch", imgName],
-      queryFn: () => fetchImgSearchResults(querySrc),
-      enabled: !!querySrc,
-      keepPreviousData: true,
-    });
+  useQuery({
+    queryKey: ["imgSearch", imgName],
+    queryFn: () => fetchImgSearchResults(imgQuery),
+    enabled: !!imgQuery,
+    keepPreviousData: true,
+  });
 
   /** Make request to server to fetch text search results */
   const fetchTextSearchResults = async (textSearchQuery) => {
@@ -80,8 +80,8 @@ const SearchResults = ({
 
   /** Invalidate queries of image search */
   useEffect(() => {
-    queryClient.invalidateQueries(["imgSearch", querySrc]);
-  }, [querySrc, queryClient]);
+    queryClient.invalidateQueries(["imgSearch", imgQuery]);
+  }, [imgQuery, queryClient]);
 
   /** Invalidate queries of text search */
   useEffect(() => {
@@ -127,7 +127,7 @@ const SearchResults = ({
               searchResultData={imgSearchResultData || textSearchResultData}
               updatedSearchData={updatedSearchData}
               setUpdatedSearchData={setUpdatedSearchData}
-              querySrc={querySrc}
+              imgQuery={imgQuery}
             />
           </>
         ) : (

@@ -27,8 +27,8 @@ const blobToDataURL = (blob) => {
 };
 
 const SelectedImageDisplay = ({
-  querySrc,
-  setQuerySrc,
+  imgQuery,
+  setImgQuery,
   imgName,
   setImgName,
   unselectImage,
@@ -46,20 +46,20 @@ const SelectedImageDisplay = ({
   const closePopover = () => setAnchorEl(null);
 
   useEffect(() => {
-    if (querySrc instanceof File) {
-      const objectUrl = URL.createObjectURL(querySrc);
+    if (imgQuery instanceof File) {
+      const objectUrl = URL.createObjectURL(imgQuery);
       setImageSrc(objectUrl);
 
       return () => {
         URL.revokeObjectURL(objectUrl);
       };
-    } else if (typeof querySrc === "string") {
-      fetchImageAsBlob(querySrc)
+    } else if (typeof imgQuery === "string") {
+      fetchImageAsBlob(imgQuery)
         .then(blobToDataURL)
         .then((dataURL) => setImageSrc(dataURL))
         .catch((error) => console.error("Error fetching image:", error));
     }
-  }, [querySrc]);
+  }, [imgQuery]);
 
   if (!imageSrc) {
     return <Skeleton variant="text" width={240} height={36} />;
@@ -149,7 +149,7 @@ const SelectedImageDisplay = ({
         closeDisplayModal={closeDisplayModal}
         imgName={imgName}
         imageSrc={imageSrc}
-        setQuerySrc={setQuerySrc}
+        setImgQuery={setImgQuery}
         setImgName={setImgName}
       />
     </>

@@ -27,11 +27,11 @@ export async function POST(request) {
     searchDataForm.append("index_id", indexId);
     searchDataForm.append("query_media_type", "image");
 
-    const querySrc = formData.get("query");
+    const imgQuery = formData.get("query");
     const imgFile = formData.get("file");
 
-    if (querySrc) {
-      searchDataForm.append("query_media_url", querySrc);
+    if (imgQuery) {
+      searchDataForm.append("query_media_url", imgQuery);
     } else if (imgFile && imgFile instanceof Blob) {
       const buffer = Buffer.from(await imgFile.arrayBuffer());
       searchDataForm.append("query_media_file", buffer, imgFile.name);

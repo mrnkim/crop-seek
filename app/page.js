@@ -9,13 +9,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function Home() {
-  const [querySrc, setQuerySrc] = useState("");
+  const [imgQuery, setImgQuery] = useState("");
   const [updatedSearchData, setUpdatedSearchData] = useState([]);
   const [imgName, setImgName] = useState("");
   const [videoError, setVideoError] = useState(null);
   const [textSearchQuery, setTextSearchQuery] = useState("");
   const [textSearchSubmitted, setTextSearchSubmitted] = useState(false);
-
 
   /** Set text search query as input value and status */
   async function handleSubmit(textInputValue) {
@@ -25,7 +24,7 @@ export default function Home() {
 
   /** Set image name and query src  */
   const onImageSelected = async (src) => {
-    setQuerySrc(null);
+    setImgQuery(null);
     setUpdatedSearchData([]);
 
     if (typeof src === "string") {
@@ -33,12 +32,12 @@ export default function Home() {
     } else if (src instanceof File) {
       setImgName(src.name);
     }
-    setQuerySrc(src);
+    setImgQuery(src);
   };
 
   /** Clear query and results  */
   const clearQueryAndResults = () => {
-    setQuerySrc("");
+    setImgQuery("");
     setUpdatedSearchData([]);
     setImgName("");
   };
@@ -53,8 +52,8 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="w-full max-w-4xl">
         <SearchBar
-          querySrc={querySrc}
-          setQuerySrc={setQuerySrc}
+          imgQuery={imgQuery}
+          setImgQuery={setImgQuery}
           imgName={imgName}
           setImgName={setImgName}
           clearQueryAndResults={clearQueryAndResults}
@@ -62,7 +61,7 @@ export default function Home() {
           handleSubmit={handleSubmit}
           setTextSearchQuery={setTextSearchQuery}
         />
-        {updatedSearchData.length < 1 && (
+        {!imgQuery && (
           <Videos videoError={videoError} setVideoError={setVideoError} />
         )}
         {/* {(searchResultsLoading || textSearchResultsLoading) && (
@@ -70,12 +69,12 @@ export default function Home() {
             <LoadingSpinner size="lg" color="primary" />
           </div>
         )} */}
-        {(imgName || textSearchSubmitted) && (
+        {(imgQuery || textSearchSubmitted) && (
           <SearchResults
             // searchResultData={searchResultData || textSearchResultData}
             updatedSearchData={updatedSearchData}
             setUpdatedSearchData={setUpdatedSearchData}
-            querySrc={querySrc}
+            imgQuery={imgQuery}
             textSearchQuery={textSearchQuery}
             imgName={imgName}
             textSearchSubmitted={textSearchSubmitted}

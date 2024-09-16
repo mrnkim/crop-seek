@@ -7,8 +7,8 @@ import TextSearchForm from "./TextSearchForm";
 import CustomCloseIcon from "./CustomCloseIcon";
 
 const SearchBar = ({
-  querySrc,
-  setQuerySrc,
+  imgQuery,
+  setImgQuery,
   imgName,
   setImgName,
   clearQueryAndResults,
@@ -40,16 +40,16 @@ const SearchBar = ({
             <img src="/SearchVideoLeft.svg" alt="Search Icon" />
           </button>
         </div>
-        {querySrc && (
+        {imgQuery && (
           <SelectedImageDisplay
-            querySrc={querySrc}
-            setQuerySrc={setQuerySrc}
+            imgQuery={imgQuery}
+            setImgQuery={setImgQuery}
             imgName={imgName}
             setImgName={setImgName}
             unselectImage={clearQueryAndResults}
           />
         )}
-        {!querySrc && (
+        {!imgQuery && (
           <TextSearchForm
             handleFormSubmit={handleFormSubmit}
             inputRef={inputRef}

@@ -9,7 +9,7 @@ const SearchResultList = ({
   searchResultData,
   updatedSearchData,
   setUpdatedSearchData,
-  querySrc,
+  imgQuery,
 }) => {
   const [nextPageLoading, setNextPageLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -86,12 +86,12 @@ const SearchResultList = ({
       }
     };
 
-    if (querySrc) {
+    if (imgQuery) {
       setUpdatedSearchData({ searchData: [], pageInfo: {} });
       setNextPageToken(null);
       updateSearchData();
     }
-  }, [searchResultData, querySrc, setUpdatedSearchData]);
+  }, [searchResultData, imgQuery, setUpdatedSearchData]);
 
   const handleProgress = (state, index, end) => {
     if (state.playedSeconds >= end && index === playingIndex) {
