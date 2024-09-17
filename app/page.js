@@ -10,7 +10,8 @@ import { useQueryClient } from "@tanstack/react-query";
 
 export default function Home() {
   const [imgQuery, setImgQuery] = useState("");
-  const [updatedSearchData, setUpdatedSearchData] = useState([]);
+  const [updatedSearchData, setUpdatedSearchData] = useState({ searchData: [], pageInfo: {} });
+  console.log("🚀 > Home > updatedSearchData=", updatedSearchData)
   const [imgName, setImgName] = useState("");
   const [videoError, setVideoError] = useState(null);
   const [textSearchQuery, setTextSearchQuery] = useState("");
@@ -25,7 +26,7 @@ export default function Home() {
   /** Set image name and query src  */
   const onImageSelected = async (src) => {
     setImgQuery(null);
-    setUpdatedSearchData([]);
+    setUpdatedSearchData({ searchData: [], pageInfo: {} });
 
     if (typeof src === "string") {
       setImgName(src.split("/").pop());
@@ -38,7 +39,7 @@ export default function Home() {
   /** Clear query and results  */
   const clearQueryAndResults = () => {
     setImgQuery("");
-    setUpdatedSearchData([]);
+    setUpdatedSearchData({ searchData: [], pageInfo: {} });
     setImgName("");
   };
 

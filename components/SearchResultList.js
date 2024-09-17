@@ -32,7 +32,9 @@ const SearchResultList = ({
       }
 
       const { pageInfo, searchData } = await response.json();
-      setNextPageToken(pageInfo.next_page_token || pageInfo.nextPageToken || null);
+      setNextPageToken(
+        pageInfo.next_page_token || pageInfo.nextPageToken || null
+      );
       return { pageInfo, searchData };
     } catch (error) {
       console.error("Error getting next search results", error);
@@ -77,7 +79,10 @@ const SearchResultList = ({
             ...searchResultData,
             searchData: updatedData,
           });
-          setNextPageToken(searchResultData.pageInfo.next_page_token || searchResultData.pageInfo.nextPageToken );
+          setNextPageToken(
+            searchResultData.pageInfo.next_page_token ||
+              searchResultData.pageInfo.nextPageToken
+          );
         } catch (error) {
           setError(error.message);
         } finally {
@@ -115,7 +120,6 @@ const SearchResultList = ({
     if (result && result.searchData) {
       const updatedData = await fetchVideoDetails(result.searchData);
       setUpdatedSearchData((prevData) => ({
-        ...prevData,
         searchData: [...prevData.searchData, ...updatedData],
         pageInfo: {
           ...prevData.pageInfo,
