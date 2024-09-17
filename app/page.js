@@ -10,8 +10,10 @@ import { useQueryClient } from "@tanstack/react-query";
 
 export default function Home() {
   const [imgQuery, setImgQuery] = useState("");
-  const [updatedSearchData, setUpdatedSearchData] = useState({ searchData: [], pageInfo: {} });
-  console.log("🚀 > Home > updatedSearchData=", updatedSearchData)
+  const [updatedSearchData, setUpdatedSearchData] = useState({
+    searchData: [],
+    pageInfo: {},
+  });
   const [imgName, setImgName] = useState("");
   const [videoError, setVideoError] = useState(null);
   const [textSearchQuery, setTextSearchQuery] = useState("");
@@ -41,6 +43,8 @@ export default function Home() {
     setImgQuery("");
     setUpdatedSearchData({ searchData: [], pageInfo: {} });
     setImgName("");
+    setTextSearchQuery("");
+    setTextSearchSubmitted(false);
   };
 
   // if (videoError || searchError || textSearchError) {
@@ -62,7 +66,7 @@ export default function Home() {
           handleSubmit={handleSubmit}
           setTextSearchQuery={setTextSearchQuery}
         />
-        {!imgQuery && (
+        {(!imgQuery && !textSearchSubmitted) && (
           <Videos videoError={videoError} setVideoError={setVideoError} />
         )}
         {/* {(searchResultsLoading || textSearchResultsLoading) && (

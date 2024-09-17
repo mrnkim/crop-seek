@@ -21,15 +21,13 @@ const SearchBar = ({
   const handleFormSubmit = (evt) => {
     evt.preventDefault();
     if (inputRef.current.value.length > 0) {
-    handleSubmit(inputRef.current.value);
-  }
+      handleSubmit(inputRef.current.value);
+    }
   };
 
   const onClear = () => {
-    if (inputRef.current) {
-      inputRef.current.value = "";
-      setTextSearchQuery("");
-    }
+    inputRef.current.value = "";
+    clearQueryAndResults();
   };
 
   return (

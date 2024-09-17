@@ -47,12 +47,12 @@ const SearchResults = ({
 
   /** useQuery to fetch image search results  */
   const { data: imgSearchResultData, isLoading: imgSearchResultLoading } =
-  useQuery({
-    queryKey: ["imgSearch", imgName],
-    queryFn: () => fetchImgSearchResults(imgQuery),
-    enabled: !!imgQuery,
-    keepPreviousData: true,
-  });
+    useQuery({
+      queryKey: ["imgSearch", imgName],
+      queryFn: () => fetchImgSearchResults(imgQuery),
+      enabled: !!imgQuery,
+      keepPreviousData: true,
+    });
 
   /** Make request to server to fetch text search results */
   const fetchTextSearchResults = async (textSearchQuery) => {
@@ -113,13 +113,10 @@ const SearchResults = ({
                 )}
               >
                 <span> • </span>
-                {updatedSearchData?.pageInfo?.total_results ||
-                  updatedSearchData?.pageInfo?.totalResults}
                 {"  "}
-                {updatedSearchData?.pageInfo?.total_results ||
-                updatedSearchData?.pageInfo?.totalResults > 1
-                  ? " matches"
-                  : " match"}{" "}
+                {imgSearchResultData?.pageInfo?.total_results ||
+                  textSearchResultData?.pageInfo?.total_results}{" "}
+                matches{" "}
               </p>
               <LimitsOfSearchByImageButton />
             </div>

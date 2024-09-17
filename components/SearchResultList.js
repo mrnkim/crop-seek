@@ -66,37 +66,35 @@ const SearchResultList = ({
     }
   };
 
-  useEffect(() => {
-    const updateSearchData = async () => {
-      if (searchResultData) {
-        setNextPageLoading(true);
-        setError(null);
-        try {
-          const updatedData = await fetchVideoDetails(
-            searchResultData.searchData || searchResultData.textSearchResults
-          );
-          setUpdatedSearchData({
-            ...searchResultData,
-            searchData: updatedData,
-          });
-          setNextPageToken(
-            searchResultData.pageInfo.next_page_token ||
-              searchResultData.pageInfo.nextPageToken
-          );
-        } catch (error) {
-          setError(error.message);
-        } finally {
-          setNextPageLoading(false);
-        }
+  const updateSearchData = async () => {
+    if (searchResultData) {
+      setNextPageLoading(true);
+      setError(null);
+      try {
+        const updatedData = await fetchVideoDetails(
+          searchResultData.searchData || searchResultData.textSearchResults
+        );
+        setUpdatedSearchData({
+          ...searchResultData,
+          searchData: updatedData,
+        });
+        setNextPageToken(
+          searchResultData.pageInfo.next_page_token ||
+            searchResultData.pageInfo.nextPageToken
+        );
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setNextPageLoading(false);
       }
-    };
+    }
+  };
 
-    if (imgQuery) {
+  useEffect(() => {
       setUpdatedSearchData({ searchData: [], pageInfo: {} });
       setNextPageToken(null);
       updateSearchData();
-    }
-  }, [searchResultData, imgQuery, setUpdatedSearchData]);
+  }, [searchResultData, setUpdatedSearchData]);
 
   const handleProgress = (state, index, end) => {
     if (state.playedSeconds >= end && index === playingIndex) {
