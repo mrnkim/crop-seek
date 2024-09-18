@@ -1,6 +1,5 @@
-import CloseIcon from "@mui/icons-material/Close";
 import InsertLink from "@mui/icons-material/InsertLink";
-import { Alert, DialogContent, DialogTitle, IconButton } from "@mui/material";
+import { Alert, DialogContent, DialogTitle } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import Button from "./Button";
 import clsx from "clsx";
@@ -10,42 +9,47 @@ import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import ImageDropzoneHelperText from "./ImageDropzoneHelperText";
 import CustomCloseIcon from "./CustomCloseIcon";
-
-const acceptedImageTypes = {
-  "image/jpeg": [".jpeg", ".jpg"],
-  "image/png": [".png"],
-};
-const MAX_IMAGE_SIZE = 1024 * 1024 * 5; // 5MB
-
-const getErrorMessage = (code) => {
-  switch (code) {
-    case "file-invalid-type":
-      return "Image file format must be .png or .jpeg";
-    case "too-many-files":
-      return "Please drop a single image file";
-    case "file-too-large":
-      return "Image file size must be maximum 5MB";
-    case "invalid-url":
-      return "The URL you entered does not point to a valid image";
-    default:
-      return "Unexpected error occurred!";
-  }
-};
-
-const SearchByImageButtonAndModal = ({
-  onImageSelected,
-}) => {
+/**
+ *
+ * SearchBar -> SearchByImageButtonAndModal -> { ImageDropZoneHelperText }
+ */
+const SearchByImageButtonAndModal = ({ handleImgSubmit }) => {
   const [imageUrlFromInput, setImageUrlFromInput] = useState("");
   const [errorCode, setErrorCode] = useState();
   const [isHovering, setIsHovering] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const acceptedImageTypes = {
+    "image/jpeg": [".jpeg", ".jpg"],
+    "image/png": [".png"],
+  };
+
+  const MAX_IMAGE_SIZE = 1024 * 1024 * 5;
+
+  /** Returns an error message based on the provided error code */
+  const getErrorMessage = (code) => {
+    switch (code) {
+      case "file-invalid-type":
+        return "Image file format must be .png or .jpeg";
+      case "too-many-files":
+        return "Please drop a single image file";
+      case "file-too-large":
+        return "Image file size must be maximum 5MB";
+      case "invalid-url":
+        return "The URL you entered does not point to a valid image";
+      default:
+        return "Unexpected error occurred!";
+    }
+  };
+
+  /** Closes the modal and resets related states */
   const closeModal = () => {
     setErrorCode(undefined);
     setImageUrlFromInput("");
     setIsModalOpen(false);
   };
 
+  /** Configures the drag-and-drop area for image uploads, handling accepted and rejected files */
   const { getRootProps, getInputProps, isDragAccept } = useDropzone({
     accept: acceptedImageTypes,
     maxSize: MAX_IMAGE_SIZE,
@@ -54,7 +58,7 @@ const SearchByImageButtonAndModal = ({
       setErrorCode(undefined);
     },
     onDropAccepted: (files) => {
-      onImageSelected(files[0]);
+      handleImgSubmit(files[0]);
       closeModal();
     },
     onDropRejected: (fileRejections) => {
@@ -63,6 +67,7 @@ const SearchByImageButtonAndModal = ({
     },
   });
 
+  /** Validates the input URL and submits the image if valid */
   const handleImageUrl = () => {
     try {
       const trimmedUrl = imageUrlFromInput.trim();
@@ -73,7 +78,7 @@ const SearchByImageButtonAndModal = ({
         setErrorCode("invalid-url");
         return;
       }
-      onImageSelected(trimmedUrl);
+      handleImgSubmit(trimmedUrl);
       closeModal();
     } catch (e) {
       setErrorCode("invalid-url");

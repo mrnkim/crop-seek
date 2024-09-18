@@ -7,25 +7,32 @@ import Video from "./Video";
 import LoadingSpinner from "./LoadingSpinner";
 import ErrorFallback from "./ErrorFallback";
 
-const fetchIndex = async () => {
-  const response = await fetch(`/api/getIndex`);
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
-  return response.json();
-};
-
-const fetchVideos = async (page) => {
-  const response = await fetch(`/api/getVideos?page=${page}`);
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
-  return response.json();
-};
-
-const Videos = ({ videoError, setVideoError }) => {
+/**
+ *
+ * Home -> { Videos } -> { Video, PageNav }
+ */
+const Videos = () => {
   const [page, setPage] = React.useState(1);
 
+  /** Fetches the index data */
+  const fetchIndex = async () => {
+    const response = await fetch(`/api/getIndex`);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  };
+
+  /** Fetches videos for the speficied page */
+  const fetchVideos = async (page) => {
+    const response = await fetch(`/api/getVideos?page=${page}`);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  };
+
+  /** Queries the index data using React Query */
   const {
     data: indexData,
     error: indexError,
@@ -33,12 +40,9 @@ const Videos = ({ videoError, setVideoError }) => {
   } = useQuery({
     queryKey: ["index"],
     queryFn: fetchIndex,
-    onError: (error) => {
-      console.error("Error fetching index data:", error);
-      setVideoError(error);
-    },
   });
 
+  /** Queries the videos data for the specified page using React Query */
   const {
     data: videosData,
     error: videosError,
@@ -47,11 +51,7 @@ const Videos = ({ videoError, setVideoError }) => {
   } = useQuery({
     queryKey: ["videos", page],
     queryFn: () => fetchVideos(page),
-    keepPreviousData: true, // Retain previous data while new data is loading
-    onError: (error) => {
-      console.error("Error fetching videos data:", error);
-      setVideoError(error);
-    },
+    keepPreviousData: true,
   });
 
   const totalPage = videosData?.page_info?.total_page || 1;
@@ -61,6 +61,10 @@ const Videos = ({ videoError, setVideoError }) => {
         indexData.total_duration % 60
       }min`
     : "";
+
+  if (indexError || videosError) {
+    return <ErrorFallback error={indexError || videosError} />;
+  }
 
   return (
     <div className={clsx("flex-1", "flex", "flex-col", "gap-y-3")}>

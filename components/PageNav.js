@@ -1,16 +1,22 @@
 import React, { useMemo, useCallback } from "react";
 import clsx from "clsx";
 
+/**
+ *
+ * Videos -> PageNav 
+ */
 const PageNav = ({ page, setPage, totalPage }) => {
-  const maxPagesToShow = 5;
-  const pageRange = Math.floor(maxPagesToShow / 2);
+  const MAX_PAGES_TO_SHOW = 5;
 
+  const pageRange = Math.floor(MAX_PAGES_TO_SHOW / 2);
+
+  /** Generates an array of page numbers for pagination, including ellipses for skipped ranges */
   const pagesArray = useMemo(() => {
     let pages = [];
     let startPage = Math.max(1, page - pageRange);
     let endPage = Math.min(totalPage, page + pageRange);
 
-    if (totalPage <= maxPagesToShow) {
+    if (totalPage <= MAX_PAGES_TO_SHOW) {
       pages = Array.from({ length: totalPage }, (_, index) => index + 1);
     } else {
       if (startPage > 2) {
@@ -32,8 +38,9 @@ const PageNav = ({ page, setPage, totalPage }) => {
     }
 
     return pages;
-  }, [page, totalPage, pageRange, maxPagesToShow]);
+  }, [page, totalPage, pageRange, MAX_PAGES_TO_SHOW]);
 
+  /** Handles page click events, updating the current page unless the clicked item is an ellipsis */
   const handlePageClick = useCallback(
     (pg) => {
       if (pg !== "...") {
@@ -43,10 +50,12 @@ const PageNav = ({ page, setPage, totalPage }) => {
     [setPage]
   );
 
+  /** Advances to the next page if not already at the last page */
   const nextPage = () => {
     if (page < totalPage) setPage(page + 1);
   };
 
+  /** Goes back to the previous page if not already at the first page */
   const previousPage = () => {
     if (page > 1) setPage(page - 1);
   };

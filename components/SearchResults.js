@@ -10,19 +10,21 @@ import ErrorFallback from "./ErrorFallback";
 import EmptyBasicIcon from "./EmptyBasicIcon";
 import LimitsOfSearchByImageButton from "./LimitsOfSearchByImageButton";
 
+/**
+ *
+ * Home -> SearchResults -> SearchResultList
+ */
 const SearchResults = ({
-  // imgSearchResultData,
   updatedSearchData,
   setUpdatedSearchData,
   imgQuery,
-  // imgSearchResultLoading,
   textSearchQuery,
-  textSearchSubmitted,
   imgName,
+  textSearchSubmitted,
 }) => {
   const queryClient = useQueryClient();
 
-  /** Make request to server to fetch image search results */
+  /** Sends a request to the server to fetch image search results */
   const fetchImgSearchResults = async (imagePath) => {
     const formData = new FormData();
 
@@ -45,7 +47,7 @@ const SearchResults = ({
     return response.json();
   };
 
-  /** useQuery to fetch image search results  */
+  /** Queries image search results by using React Query */
   const { data: imgSearchResultData, isLoading: imgSearchResultLoading } =
     useQuery({
       queryKey: ["imgSearch", imgName],
@@ -54,7 +56,7 @@ const SearchResults = ({
       keepPreviousData: true,
     });
 
-  /** Make request to server to fetch text search results */
+  /** Sends a request to the server to fetch text search results */
   const fetchTextSearchResults = async (textSearchQuery) => {
     const response = await fetch(`/api/textSearch`, {
       method: "POST",
@@ -69,7 +71,7 @@ const SearchResults = ({
     return response.json();
   };
 
-  /** useQuery to fetch text search results  */
+  /** Queries text search results by using React Query */
   const { data: textSearchResultData, isLoading: textSearchResultLoading } =
     useQuery({
       queryKey: ["textSearch", textSearchQuery],
@@ -78,12 +80,12 @@ const SearchResults = ({
       keepPreviousData: true,
     });
 
-  /** Invalidate queries of image search */
+  /** Invalidates cached image search queries when the image query changes */
   useEffect(() => {
     queryClient.invalidateQueries(["imgSearch", imgQuery]);
   }, [imgQuery, queryClient]);
 
-  /** Invalidate queries of text search */
+  /** Invalidates cached text search queries when a text search is submitted */
   useEffect(() => {
     if (textSearchSubmitted) {
       queryClient.invalidateQueries(["textSearch", textSearchQuery]);
@@ -120,11 +122,10 @@ const SearchResults = ({
               </p>
               <LimitsOfSearchByImageButton />
             </div>
-            <SearchResultList
+          <SearchResultList
               searchResultData={imgSearchResultData || textSearchResultData}
               updatedSearchData={updatedSearchData}
               setUpdatedSearchData={setUpdatedSearchData}
-              imgQuery={imgQuery}
             />
           </>
         ) : (

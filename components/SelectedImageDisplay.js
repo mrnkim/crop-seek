@@ -1,31 +1,14 @@
 /* eslint-disable react/prop-types */
 import CloseIcon from "@mui/icons-material/Close";
-import { IconButton,  Popper,  Skeleton } from "@mui/material";
+import { IconButton, Popper, Skeleton } from "@mui/material";
 import clsx from "clsx";
 import React, { useState, useEffect } from "react";
 import styles from "./styles.module.css";
 import ImageCropArea from "./ImageCropArea";
 
-/** Fetch image as a blob using the proxy API route */
-const fetchImageAsBlob = async (filePath) => {
-  const response = await fetch(
-    `/api/proxy-image?url=${encodeURIComponent(filePath)}`
-  );
-  if (!response.ok) {
-    throw new Error("Failed to fetch image");
-  }
-  return await response.blob();
-};
-
-const blobToDataURL = (blob) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(blob);
-  });
-};
-
+/**
+ * SeachBar -> SelectedImageDisplay -> ImageCropArea
+ */
 const SelectedImageDisplay = ({
   imgQuery,
   setImgQuery,
@@ -35,23 +18,55 @@ const SelectedImageDisplay = ({
 }) => {
   const [imageSrc, setImageSrc] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const openDisplayModal = () => setIsModalOpen(true);
-  const closeDisplayModal = () => setIsModalOpen(false);
-
   const [anchorEl, setAnchorEl] = useState(null);
   const [arrowEl, setArrowEl] = useState(null);
+
+  const openDisplayModal = () => setIsModalOpen(true);
+
+  const closeDisplayModal = () => setIsModalOpen(false);
+
   const openPopover = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const closePopover = () => setAnchorEl(null);
+
+  const onCloseIconClick = (e) => {
+    e.stopPropagation();
+    unselectImage();
+  };
+
+  /** Fetches an image as a blob using the proxy API route */
+  const fetchImageAsBlob = async (filePath) => {
+    const response = await fetch(
+      `/api/proxy-image?url=${encodeURIComponent(filePath)}`
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch image");
+    }
+    return await response.blob();
+  };
+
+  /** Converts a Blob object to a Data URL */
+  const blobToDataURL = (blob) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  };
+
+  if (!imageSrc) {
+    return <Skeleton variant="text" width={240} height={36} />;
+  }
 
   useEffect(() => {
     if (imgQuery instanceof File) {
       const objectUrl = URL.createObjectURL(imgQuery);
       setImageSrc(objectUrl);
-
       return () => {
-        URL.revokeObjectURL(objectUrl);
+        URL.revokeObjectURL(objectUrl); //cleanup function to remove the temp URL
       };
     } else if (typeof imgQuery === "string") {
       fetchImageAsBlob(imgQuery)
@@ -60,17 +75,6 @@ const SelectedImageDisplay = ({
         .catch((error) => console.error("Error fetching image:", error));
     }
   }, [imgQuery]);
-
-  if (!imageSrc) {
-    return <Skeleton variant="text" width={240} height={36} />;
-  }
-
-  const onCloseIconClick = (e) => {
-    e.stopPropagation();
-    unselectImage();
-  };
-
-  const isPopperOpen = Boolean(anchorEl);
 
   return (
     <>
@@ -116,7 +120,7 @@ const SelectedImageDisplay = ({
         id="image-display-popper"
         className="z-navbar border border-grey-200"
         placement="right"
-        open={isPopperOpen}
+        open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         modifiers={[
           {

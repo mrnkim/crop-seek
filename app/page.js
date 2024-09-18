@@ -1,32 +1,33 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import SearchBar from "@/components/SearchBar";
 import SearchResults from "@/components/SearchResults";
 import Videos from "@/components/Videos";
-import ErrorFallback from "../components/ErrorFallback";
-import LoadingSpinner from "../components/LoadingSpinner";
-import { useQuery } from "@tanstack/react-query";
-import { useQueryClient } from "@tanstack/react-query";
 
+
+/**
+ *
+ * Home -> { SearchBar, Videos, SearchResults }
+ *
+ */
 export default function Home() {
   const [imgQuery, setImgQuery] = useState("");
+  const [imgName, setImgName] = useState("");
+  const [textSearchQuery, setTextSearchQuery] = useState("");
+  const [textSearchSubmitted, setTextSearchSubmitted] = useState(false);
   const [updatedSearchData, setUpdatedSearchData] = useState({
     searchData: [],
     pageInfo: {},
   });
-  const [imgName, setImgName] = useState("");
-  const [videoError, setVideoError] = useState(null);
-  const [textSearchQuery, setTextSearchQuery] = useState("");
-  const [textSearchSubmitted, setTextSearchSubmitted] = useState(false);
 
-  /** Set text search query as input value and status */
-  async function handleSubmit(textInputValue) {
+  /** Set text search query as input value and update text search submit status */
+  async function handleTextSubmit(textInputValue) {
     setTextSearchQuery(textInputValue);
     setTextSearchSubmitted(true);
   }
 
   /** Set image name and query src  */
-  const onImageSelected = async (src) => {
+  const handleImgSubmit = async (src) => {
     setImgQuery(null);
     setUpdatedSearchData({ searchData: [], pageInfo: {} });
 
@@ -47,12 +48,6 @@ export default function Home() {
     setTextSearchSubmitted(false);
   };
 
-  // if (videoError || searchError || textSearchError) {
-  //   return (
-  //     <ErrorFallback error={videoError || searchError || textSearchError} />
-  //   );
-  // }
-
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="w-full max-w-4xl">
@@ -62,30 +57,18 @@ export default function Home() {
           imgName={imgName}
           setImgName={setImgName}
           clearQueryAndResults={clearQueryAndResults}
-          onImageSelected={onImageSelected}
-          handleSubmit={handleSubmit}
-          setTextSearchQuery={setTextSearchQuery}
+          handleImgSubmit={handleImgSubmit}
+          handleTextSubmit={handleTextSubmit}
         />
-        {(!imgQuery && !textSearchSubmitted) && (
-          <Videos videoError={videoError} setVideoError={setVideoError} />
-        )}
-        {/* {(searchResultsLoading || textSearchResultsLoading) && (
-          <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
-            <LoadingSpinner size="lg" color="primary" />
-          </div>
-        )} */}
+        {!imgQuery && !textSearchSubmitted && <Videos />}
         {(imgQuery || textSearchSubmitted) && (
           <SearchResults
-            // searchResultData={searchResultData || textSearchResultData}
             updatedSearchData={updatedSearchData}
             setUpdatedSearchData={setUpdatedSearchData}
             imgQuery={imgQuery}
             textSearchQuery={textSearchQuery}
             imgName={imgName}
             textSearchSubmitted={textSearchSubmitted}
-            // searchResultsLoading={
-            //   searchResultsLoading || textSearchResultsLoading
-            // }
           />
         )}
       </div>

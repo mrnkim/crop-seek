@@ -4,42 +4,45 @@ import clsx from "clsx";
 import ReactPlayer from "react-player";
 import ErrorFallback from "./ErrorFallback";
 
-const fetchVideoDetail = async (videoId) => {
-  const response = await fetch(`/api/getVideo?videoId=${videoId}`);
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
-  return response.json();
-};
-
-const formatDuration = (seconds) => {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const secs = seconds % 60;
-
-  return [
-    hours.toString().padStart(2, "0"),
-    minutes.toString().padStart(2, "0"),
-    secs.toString().padStart(2, "0"),
-  ].join(":");
-};
-
+/**
+ *
+ * Videos ->  Video
+ */
 const Video = ({ video }) => {
   const [playing, setPlaying] = useState(false);
 
-  const {
-    data: videoDetail,
-    error,
-    isLoading,
-  } = useQuery({
-    queryKey: ["videoDetail", video._id || video.videoId],
-    queryFn: () => fetchVideoDetail(video._id || video.videoId),
+  /** Fetches detailed information of a video */
+  const fetchVideoDetail = async (videoId) => {
+    const response = await fetch(`/api/getVideo?videoId=${videoId}`);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  };
+
+  /** Formats a duration in seconds into a "HH:MM:SS" string format */
+  const formatDuration = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+
+    return [
+      hours.toString().padStart(2, "0"),
+      minutes.toString().padStart(2, "0"),
+      secs.toString().padStart(2, "0"),
+    ].join(":");
+  };
+
+  /** Queries the detailed information of a video using React Query */
+  const { data: videoDetail, videoError } = useQuery({
+    queryKey: ["videoDetail", video?._id || video?.videoId],
+    queryFn: () => fetchVideoDetail(video?._id || video?.videoId),
     staleTime: 600000,
     cacheTime: 900000,
   });
 
-  if (error) {
-    return <ErrorFallback error={error} />;
+  if (videoError) {
+    return <ErrorFallback error={videoError} />;
   }
 
   return (
@@ -92,14 +95,14 @@ const Video = ({ video }) => {
               )}
             >
               <p className={clsx("text-white", "text-xs font-light")}>
-                {formatDuration(video.metadata.duration)}
+                {formatDuration(video?.metadata?.duration)}
               </p>
             </div>
           </div>
         </div>
         <div className="text-center mb-2">
           <p className={clsx("mt-2", "text-body3", "truncate", "grey-700")}>
-            {video.metadata.filename}
+            {video?.metadata?.filename}
           </p>
         </div>
       </div>

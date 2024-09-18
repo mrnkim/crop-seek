@@ -1,10 +1,9 @@
-import { React, useState, useRef, useEffect } from "react";
+import { React, useState, useRef } from "react";
 import CustomCloseIcon from "./CustomCloseIcon";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
-  IconButton,
   dialogClasses,
 } from "@mui/material";
 import ReactCrop from "react-image-crop";
@@ -20,11 +19,12 @@ const ImageCropArea = ({
   setImgQuery,
   setImgName,
 }) => {
+  const imgRef = useRef(null);
+
   const [crop, setCrop] = useState({});
   const [completedCrop, setCompletedCrop] = useState(null);
 
-  const imgRef = useRef(null);
-
+  /** Crops an image according to the specified dimensions and returns the cropped image as a Data URL */
   const getCroppedImage = (image, crop) => {
     return new Promise((resolve, reject) => {
       if (!crop || !image) {
@@ -68,6 +68,7 @@ const ImageCropArea = ({
       );
 
       try {
+        // The canvas content is converted to a Data URL in JPEG format
         const dataUrl = canvas.toDataURL("image/jpeg");
         resolve(dataUrl);
       } catch (error) {
@@ -76,12 +77,14 @@ const ImageCropArea = ({
     });
   };
 
+  /** Converts a base64 string to a File object with the specified filename */
   const base64ToFile = async (base64String, fileName) => {
     const response = await fetch(base64String);
     const blob = await response.blob();
     return new File([blob], fileName, { type: blob.type });
   };
 
+  /** Handles the cropping of an image, converts the crop to a File, and updates state with the cropped image */
   const onCropSearchClick = async () => {
     if (completedCrop && imgRef.current) {
       try {

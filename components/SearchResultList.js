@@ -5,11 +5,14 @@ import { useInView } from "react-intersection-observer";
 import LoadingSpinner from "./LoadingSpinner";
 import ErrorFallback from "./ErrorFallback";
 
+/**
+ *
+ * SearchResults -> SearchResultList
+ */
 const SearchResultList = ({
   searchResultData,
   updatedSearchData,
   setUpdatedSearchData,
-  imgQuery,
 }) => {
   const [nextPageLoading, setNextPageLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -19,6 +22,7 @@ const SearchResultList = ({
 
   const playerRefs = useRef([]);
 
+  /** Fetches the next set of search results using the next page token */
   const fetchNextSearchResults = async () => {
     setNextPageLoading(true);
     setError(null);
@@ -44,6 +48,7 @@ const SearchResultList = ({
     }
   };
 
+  /** Fetches detailed video information for each item in the provided data array */
   const fetchVideoDetails = async (data) => {
     try {
       const updatedData = await Promise.all(
@@ -66,6 +71,7 @@ const SearchResultList = ({
     }
   };
 
+  /** Updates the search data with fetched video details and manages pagination tokens */
   const updateSearchData = async () => {
     if (searchResultData) {
       setNextPageLoading(true);
@@ -90,18 +96,14 @@ const SearchResultList = ({
     }
   };
 
-  useEffect(() => {
-      setUpdatedSearchData({ searchData: [], pageInfo: {} });
-      setNextPageToken(null);
-      updateSearchData();
-  }, [searchResultData, setUpdatedSearchData]);
-
+  /** Handles progress updates during video playback and stops playback at the specified end time */
   const handleProgress = (state, index, end) => {
     if (state.playedSeconds >= end && index === playingIndex) {
       setPlayingIndex(null);
     }
   };
 
+  /** Starts playing the specified video from the given start time */
   const handlePlay = (index, start) => {
     if (playingIndex !== null && playingIndex !== index) {
       setPlayingIndex(null);
@@ -113,6 +115,7 @@ const SearchResultList = ({
     }
   };
 
+  /** Loads the next page of search results and updates the displayed data */
   const handleNextPage = async () => {
     const result = await fetchNextSearchResults();
     if (result && result.searchData) {
@@ -127,16 +130,11 @@ const SearchResultList = ({
     }
   };
 
+  /** React Query hook that sets up an intersection observer to load more data when in view */
   const { ref: observerRef, inView } = useInView({
     threshold: 0.8,
     triggerOnce: false,
   });
-
-  useEffect(() => {
-    if (inView && nextPageToken) {
-      handleNextPage();
-    }
-  }, [inView, nextPageToken]);
 
   if (nextPageLoading && !updatedSearchData?.searchData?.length) {
     return (
@@ -149,6 +147,20 @@ const SearchResultList = ({
   if (error) {
     return <ErrorFallback message={error} />;
   }
+
+  /** Resets search data and fetches updated results when searchResultData changes */
+  useEffect(() => {
+    setUpdatedSearchData({ searchData: [], pageInfo: {} });
+    setNextPageToken(null);
+    updateSearchData();
+  }, [searchResultData, setUpdatedSearchData]);
+
+  /**  Triggers loading the next page when the observer element comes into view and a next page token exists */
+  useEffect(() => {
+    if (inView && nextPageToken) {
+      handleNextPage();
+    }
+  }, [inView, nextPageToken]);
 
   return (
     <div className="flex flex-wrap -mx-2">
