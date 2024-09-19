@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom"; // Import jest-dom for additional matchers
 import Home from "../app/page";
 
@@ -28,5 +28,5 @@ describe("Home Component", () => {
   test("renders the Videos component by default", () => {
     render(<Home />);
     expect(screen.getByText("Videos Component")).toBeInTheDocument();
-  });a
+  });
 });
