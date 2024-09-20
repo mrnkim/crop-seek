@@ -22,6 +22,12 @@ const SearchResultList = ({
 
   const playerRefs = useRef([]);
 
+  /** React Query hook that sets up an intersection observer to load more data when in view */
+  const { ref: observerRef, inView } = useInView({
+    threshold: 0.8,
+    triggerOnce: false,
+  });
+
   /** Fetches the next set of search results using the next page token */
   const fetchNextSearchResults = async () => {
     setNextPageLoading(true);
@@ -130,11 +136,19 @@ const SearchResultList = ({
     }
   };
 
-  /** React Query hook that sets up an intersection observer to load more data when in view */
-  const { ref: observerRef, inView } = useInView({
-    threshold: 0.8,
-    triggerOnce: false,
-  });
+  /** Resets search data and fetches updated results when searchResultData changes */
+  useEffect(() => {
+    setUpdatedSearchData({ searchData: [], pageInfo: {} });
+    setNextPageToken(null);
+    updateSearchData();
+  }, [searchResultData, setUpdatedSearchData]);
+
+  /** Triggers loading the next page when the observer element comes into view and a next page token exists */
+  useEffect(() => {
+    if (inView && nextPageToken) {
+      handleNextPage();
+    }
+  }, [inView, nextPageToken]);
 
   if (nextPageLoading && !updatedSearchData?.searchData?.length) {
     return (
@@ -147,20 +161,6 @@ const SearchResultList = ({
   if (error) {
     return <ErrorFallback message={error} />;
   }
-
-  /** Resets search data and fetches updated results when searchResultData changes */
-  useEffect(() => {
-    setUpdatedSearchData({ searchData: [], pageInfo: {} });
-    setNextPageToken(null);
-    updateSearchData();
-  }, [searchResultData, setUpdatedSearchData]);
-
-  /**  Triggers loading the next page when the observer element comes into view and a next page token exists */
-  useEffect(() => {
-    if (inView && nextPageToken) {
-      handleNextPage();
-    }
-  }, [inView, nextPageToken]);
 
   return (
     <div className="flex flex-wrap -mx-2">

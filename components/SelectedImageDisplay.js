@@ -57,10 +57,6 @@ const SelectedImageDisplay = ({
     });
   };
 
-  if (!imageSrc) {
-    return <Skeleton variant="text" width={240} height={36} />;
-  }
-
   useEffect(() => {
     if (imgQuery instanceof File) {
       const objectUrl = URL.createObjectURL(imgQuery);
@@ -75,6 +71,10 @@ const SelectedImageDisplay = ({
         .catch((error) => console.error("Error fetching image:", error));
     }
   }, [imgQuery]);
+
+  if (!imageSrc) {
+    return <Skeleton variant="text" width={240} height={36} />;
+  }
 
   return (
     <>

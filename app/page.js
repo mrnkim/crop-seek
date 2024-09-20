@@ -4,14 +4,13 @@ import SearchBar from "@/components/SearchBar";
 import SearchResults from "@/components/SearchResults";
 import Videos from "@/components/Videos";
 
-
 /**
  *
  * Home -> { SearchBar, Videos, SearchResults }
  *
  */
 export default function Home() {
-  const [imgQuery, setImgQuery] = useState("");
+  const [imgQuery, setImgQuery] = useState(null);
   const [imgName, setImgName] = useState("");
   const [textSearchQuery, setTextSearchQuery] = useState("");
   const [textSearchSubmitted, setTextSearchSubmitted] = useState(false);
