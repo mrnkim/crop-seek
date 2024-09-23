@@ -48,13 +48,16 @@ const SearchResults = ({
   };
 
   /** Queries image search results by using React Query */
-  const { data: imgSearchResultData, isLoading: imgSearchResultLoading } =
-    useQuery({
-      queryKey: ["imgSearch", imgName],
-      queryFn: () => fetchImgSearchResults(imgQuery),
-      enabled: !!imgQuery,
-      keepPreviousData: true,
-    });
+  const {
+    data: imgSearchResultData,
+    isLoading: imgSearchResultLoading,
+    error: imageSearchError,
+  } = useQuery({
+    queryKey: ["imgSearch", imgName],
+    queryFn: () => fetchImgSearchResults(imgQuery),
+    enabled: !!imgQuery,
+    keepPreviousData: true,
+  });
 
   /** Sends a request to the server to fetch text search results */
   const fetchTextSearchResults = async (textSearchQuery) => {
@@ -72,13 +75,16 @@ const SearchResults = ({
   };
 
   /** Queries text search results by using React Query */
-  const { data: textSearchResultData, isLoading: textSearchResultLoading } =
-    useQuery({
-      queryKey: ["textSearch", textSearchQuery],
-      queryFn: () => fetchTextSearchResults(textSearchQuery),
-      enabled: textSearchSubmitted,
-      keepPreviousData: true,
-    });
+  const {
+    data: textSearchResultData,
+    isLoading: textSearchResultLoading,
+    error: textSearchError,
+  } = useQuery({
+    queryKey: ["textSearch", textSearchQuery],
+    queryFn: () => fetchTextSearchResults(textSearchQuery),
+    enabled: textSearchSubmitted,
+    keepPreviousData: true,
+  });
 
   /** Invalidates cached image search queries when the image query changes */
   useEffect(() => {
@@ -91,6 +97,10 @@ const SearchResults = ({
       queryClient.invalidateQueries(["textSearch", textSearchQuery]);
     }
   }, [textSearchSubmitted, queryClient]);
+
+  if (imageSearchError || textSearchError) {
+    return <ErrorFallback error={imageSearchError || textSearchError} />;
+  }
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -122,7 +132,7 @@ const SearchResults = ({
               </p>
               <LimitsOfSearchByImageButton />
             </div>
-          <SearchResultList
+            <SearchResultList
               searchResultData={imgSearchResultData || textSearchResultData}
               updatedSearchData={updatedSearchData}
               setUpdatedSearchData={setUpdatedSearchData}

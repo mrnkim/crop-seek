@@ -47,7 +47,7 @@ export async function POST(request) {
     // Return the search results as a JSON response
     return NextResponse.json({
       pageInfo: responseData.page_info || {},
-      textSearchResults: responseData.data ,
+      textSearchResults: responseData.data,
     });
   } catch (error) {
     console.error("Error in POST handler:", error?.response?.data || error);
