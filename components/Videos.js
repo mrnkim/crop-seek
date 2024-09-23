@@ -58,7 +58,7 @@ const Videos = () => {
 
   const durationString = indexData
     ? `Total ${Math.floor(indexData.total_duration / 60)}h ${
-        indexData.total_duration % 60
+        Math.floor(indexData.total_duration % 60)
       }min`
     : "";
 
