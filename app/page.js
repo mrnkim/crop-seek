@@ -29,6 +29,7 @@ export default function Home() {
   const handleImgSubmit = async (src) => {
     setImgQuery(null);
     setUpdatedSearchData({ searchData: [], pageInfo: {} });
+    setTextSearchSubmitted(false);
 
     if (typeof src === "string") {
       setImgName(src.split("/").pop());

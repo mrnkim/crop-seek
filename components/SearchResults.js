@@ -109,12 +109,13 @@ const SearchResults = ({
           <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
             <LoadingSpinner size="lg" color="primary" />
           </div>
-        ) : imgSearchResultData?.pageInfo?.total_results > 0 ||
-          textSearchResultData?.pageInfo?.total_results > 0 ? (
+        ) : (imgQuery && imgSearchResultData?.pageInfo?.total_results > 0) ||
+          (textSearchSubmitted &&
+            textSearchResultData?.pageInfo?.total_results > 0) ? (
           <>
             <div className={clsx("flex", "items-center", "mt-5", "mb-5")}>
               <p className="text-subtitle2 font-medium whitespace-nowrap overflow-hidden text-ellipsis">
-                Search results {updatedSearchData?.pageInfo?.totalVideos}
+                Search results
               </p>
               <p
                 className={clsx(
@@ -126,8 +127,9 @@ const SearchResults = ({
               >
                 <span> • </span>
                 {"  "}
-                {imgSearchResultData?.pageInfo?.total_results ||
-                  textSearchResultData?.pageInfo?.total_results}{" "}
+                {(imgQuery && imgSearchResultData?.pageInfo?.total_results) ||
+                  (textSearchSubmitted &&
+                    textSearchResultData?.pageInfo?.total_results)}{" "}
                 matches{" "}
               </p>
               <LimitsOfSearchByImageButton />
