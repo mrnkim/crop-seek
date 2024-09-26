@@ -31,11 +31,7 @@ export default function Home() {
     setUpdatedSearchData({ searchData: [], pageInfo: {} });
     setTextSearchSubmitted(false);
 
-    if (typeof src === "string") {
-      setImgName(src.split("/").pop());
-    } else if (src instanceof File) {
-      setImgName(src.name);
-    }
+    setImgName(typeof src === "string" ? src.split("/").pop() : src.name);
     setImgQuery(src);
   };
 
