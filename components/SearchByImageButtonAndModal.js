@@ -70,7 +70,9 @@ const SearchByImageButtonAndModal = ({ handleImgSubmit }) => {
   /** Validates the input URL and submits the image if valid */
   const handleImageUrl = () => {
     try {
-      const trimmedUrl = imageUrlFromInput.trim();
+      const trimmedUrl = imageUrlFromInput
+        .trim()
+        .replace(/(\.jpg|\.jpeg|\.png).*/i, "$1");
       const isImage =
         /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(trimmedUrl) ||
         /f=image|f=auto/.test(trimmedUrl);
@@ -185,7 +187,7 @@ const SearchByImageButtonAndModal = ({ handleImgSubmit }) => {
             <Input
               className="h-10 border-r-0"
               fullWidth
-              placeholder="Drop an image link"
+              placeholder="Drop an image address (not link address)"
               icon={<InsertLink className="text-grey-600" fontSize="small" />}
               value={imageUrlFromInput}
               onSelect={(e) => {
