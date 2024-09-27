@@ -1,10 +1,10 @@
 ## Introduction
 
-⭐️ Check out the [Demo](https://wb-demo.vercel.app/)!
+⭐️ Check out the [Demo](https://crop-seek.vercel.app/)!
 
 <div align="center">
-  <a href="https://wb-demo.vercel.app/">
-    <img src="public/search.gif" alt="search result screenshot" style="border: 1px solid black;" />
+  <a href="https://crop-seek.vercel.app/">
+    <img src="public/search.gif" alt="crop search demo" style="border: 1px solid black;" />
   </a>
 </div>
 
@@ -27,10 +27,17 @@ Visit [Twelve Labs Playground](https://playground.twelvelabs.io/) to generate yo
 
 - Upon signing up, you'll receive free credits to index up to 10 hours of video content!
 
+### Step 2. Create an index if you don't have one
+
+- Check [here](https://docs.twelvelabs.io/docs/create-indexes) on how to create an index and get the index id
+- Make sure to check 
+
+
+
 ### Step 2. Clone the current repo
 
 ```sh
-git clone git@github.com:mrnkim/wb-demo.git
+git clone git@github.com:mrnkim/crop-seek.git
 ```
 
 ### Step 3. Create `.env` file in the root directory and provide the values for each key
@@ -40,7 +47,6 @@ git clone git@github.com:mrnkim/wb-demo.git
  TWELVELABS_INDEX_ID=<YOUR INDEX ID>
 ```
 
-- Check [here](https://docs.twelvelabs.io/docs/create-indexes) on how to create an index and get the index id
 
 ### Step 4. Install and start the client
 
