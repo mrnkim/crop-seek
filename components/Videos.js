@@ -57,9 +57,9 @@ const Videos = () => {
   const totalPage = videosData?.page_info?.total_page || 1;
 
   const durationString = indexData
-    ? `Total ${Math.floor(indexData.total_duration / 60)}h ${
-        Math.floor(indexData.total_duration % 60)
-      }min`
+    ? `Total ${Math.floor(indexData.total_duration / 60)}min ${Math.floor(
+        indexData.total_duration % 60
+      )}sec`
     : "";
 
   if (indexError || videosError) {
