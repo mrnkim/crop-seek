@@ -3,8 +3,9 @@ import { NextResponse } from "next/server";
 export async function GET(req) {
   const apiKey = process.env.TWELVELABS_API_KEY;
   const indexId = process.env.TWELVELABS_INDEX_ID;
+  const apiUrl = process.env.TWELVELABS_API_URL;
 
-  if (!apiKey || !indexId) {
+  if (!apiKey || !indexId || !apiUrl) {
     return NextResponse.json(
       { error: "API key or Index ID is not set" },
       { status: 500 }
@@ -14,7 +15,7 @@ export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const page = searchParams.get("page") || 1;
 
-  const url = `https://api.twelvelabs.io/v1.2/indexes/${indexId}/videos?page_limit=9&page=${page}`;
+  const url = `${apiUrl}/indexes/${indexId}/videos?page_limit=9&page=${page}`;
 
   const options = {
     method: "GET",

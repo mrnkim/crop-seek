@@ -1,17 +1,21 @@
 import { NextResponse } from "next/server";
 
-export async function GET(req) {
+export async function GET() {
   const apiKey = process.env.TWELVELABS_API_KEY;
   const indexId = process.env.TWELVELABS_INDEX_ID;
+  const apiUrl = process.env.TWELVELABS_API_URL;
 
-  if (!apiKey || !indexId) {
+  if (!apiKey || !indexId || !apiUrl) {
     return NextResponse.json(
-      { error: "API key or Index ID is not set" },
+      {
+        error:
+          "Required environment variables are not set. Please check TWELVELABS_API_KEY, TWELVELABS_INDEX_ID, and TWELVELABS_API_URL",
+      },
       { status: 500 }
     );
   }
 
-  const url = `https://api.twelvelabs.io/v1.2/indexes/${indexId}`;
+  const url = `${apiUrl}/indexes/${indexId}`;
 
   const options = {
     method: "GET",

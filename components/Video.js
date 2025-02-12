@@ -95,14 +95,14 @@ const Video = ({ video }) => {
               )}
             >
               <p className={clsx("text-white", "text-xs font-light")}>
-                {formatDuration(video?.metadata?.duration)}
+                {formatDuration(video?.system_metadata?.duration)}
               </p>
             </div>
           </div>
         </div>
         <div className="text-center mb-2">
           <p className={clsx("mt-2", "text-body3", "truncate", "grey-700")}>
-            {video?.metadata?.filename}
+            {video?.system_metadata?.filename}
           </p>
         </div>
       </div>

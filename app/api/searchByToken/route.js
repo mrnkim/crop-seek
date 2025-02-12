@@ -13,12 +13,12 @@ export async function GET(req) {
   }
 
   const apiKey = process.env.TWELVELABS_API_KEY;
-
+  const apiUrl = process.env.TWELVELABS_API_URL;
   if (!apiKey) {
     return NextResponse.json({ error: "API key is not set" }, { status: 500 });
   }
 
-  const url = `https://api.twelvelabs.io/v1.2/search-v2/${pageToken}`;
+  const url = `${apiUrl}/search/${pageToken}`;
 
   try {
     const response = await axios.get(url, {

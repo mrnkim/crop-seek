@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import axios from "axios";
 import FormData from "form-data";
 
@@ -8,8 +8,9 @@ export async function POST(request) {
   try {
     const apiKey = process.env.TWELVELABS_API_KEY;
     const indexId = process.env.TWELVELABS_INDEX_ID;
+    const apiUrl = process.env.TWELVELABS_API_URL;
 
-    if (!apiKey || !indexId) {
+    if (!apiKey || !indexId || !apiUrl) {
       return NextResponse.json(
         { error: "API key or Index ID is not set" },
         { status: 500 }
@@ -20,13 +21,11 @@ export async function POST(request) {
 
     const searchDataForm = new FormData();
     searchDataForm.append("search_options", "visual");
-    searchDataForm.append("search_options", "conversation");
-    searchDataForm.append("search_options", "text_in_video");
-    searchDataForm.append("search_options", "logo");
+    searchDataForm.append("search_options", "audio");
     searchDataForm.append("index_id", indexId);
     searchDataForm.append("query_text", textSearchQuery);
 
-    const url = "https://api.twelvelabs.io/v1.2/search-v2";
+    const url = `${apiUrl}/search`;
 
     const response = await axios.post(url, searchDataForm, {
       headers: {

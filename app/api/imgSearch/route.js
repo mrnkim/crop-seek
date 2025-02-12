@@ -9,8 +9,9 @@ export async function POST(request) {
     const formData = await request.formData();
     const apiKey = process.env.TWELVELABS_API_KEY;
     const indexId = process.env.TWELVELABS_INDEX_ID;
+    const apiUrl = process.env.TWELVELABS_API_URL;
 
-    if (!apiKey || !indexId) {
+    if (!apiKey || !indexId || !apiUrl) {
       return NextResponse.json(
         { error: "API key or Index ID is not set" },
         { status: 500 }
@@ -43,7 +44,7 @@ export async function POST(request) {
     }
 
     const formDataHeaders = searchDataForm.getHeaders();
-    const url = "https://api.twelvelabs.io/v1.2/search-v2";
+    const url = `${apiUrl}/search`;
 
     const response = await axios.post(url, searchDataForm, {
       headers: {

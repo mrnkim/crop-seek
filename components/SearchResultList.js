@@ -244,7 +244,7 @@ const SearchResultList = ({
                       "grey-700"
                     )}
                   >
-                    {clip.videoDetail.metadata.video_title}
+                    {clip.videoDetail.system_metadata.video_title}
                   </p>
                 </div>
               </>
