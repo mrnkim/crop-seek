@@ -1,3 +1,5 @@
+⚠️ This app supports indexes created with the latest models—Marengo 2.7 and Pegasus 1.2. For indexes built with older models, such as Marengo 2.6 and Pegasus 1.1, please refer to [Crop-Seek-V1.2](https://github.com/mrnkim/crop-seek-v1.2), which supports these models using API version 1.2.
+
 ## 👋 Introduction
 
 Crop and Seek demonstrates the power of advanced video search capabilities using the Twelve Labs API. By implementing both text and image-based search, along with the unique image cropping feature, this application provides a flexible and powerful tool for discovering relevant video content.
@@ -36,9 +38,7 @@ Visit [Twelve Labs Playground](https://playground.twelvelabs.io/) to generate yo
 
 ### Step 2. Create an index if you don't have one
 
-- Check [here](https://docs.twelvelabs.io/docs/create-indexes) on how to create an index and get the index id
-- Make sure you check “Logo” and “Text in Video” under “More options”
-  <img src="public/index_options.png" alt="index options" width="300"/>
+- This app supports indexes created with the latest models—Marengo 2.7 and Pegasus 1.2.
 
 ### Step 3. (Option 1) Start the App on Replit
 
@@ -46,11 +46,12 @@ Visit [Twelve Labs Playground](https://playground.twelvelabs.io/) to generate yo
 
    [![Run on Replit](https://replit.com/badge/github/mrnkim/crop-seek)](https://replit.com/new/github/mrnkim/crop-seek)
 
-2. Update Secrets (equivalent to .env file)
+2. Update Secrets (equivalent to .env.local file)
 
 ```
 TWELVELABS_API_KEY=<YOUR API KEY>
 TWELVELABS_INDEX_ID=<YOUR INDEX ID>
+TWELVELABS_API_URL=https://api.twelvelabs.io/v1.3
 ```
 
 3. Stop and run the Repl
@@ -63,11 +64,13 @@ TWELVELABS_INDEX_ID=<YOUR INDEX ID>
 git clone git@github.com:mrnkim/crop-seek.git
 ```
 
-2. Create `.env` file in the root directory and provide the values for each key
+2. Create `.env.local` file in the root directory and provide the values for each key
 
 ```
  TWELVELABS_API_KEY=<YOUR API KEY>
  TWELVELABS_INDEX_ID=<YOUR INDEX ID>
+ TWELVELABS_API_URL=https://api.twelvelabs.io/v1.3
+
 ```
 
 3. Install and start the client
