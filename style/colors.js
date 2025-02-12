@@ -105,7 +105,7 @@ const purple = {
   900: "#2B0D5C",
 };
 
-module.exports = {
+export default {
   grey,
   green,
   mossGreen,

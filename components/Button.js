@@ -87,7 +87,7 @@ const Button = forwardRef(
         /**
          * Text type buttons
          */
-        case "secondary": // TODO: Support dark mode
+        case "secondary":
           return clsx(
             textButtonClasses,
             // background
@@ -100,7 +100,7 @@ const Button = forwardRef(
               "text-secondary", // initial style
             ]
           );
-        case "subtle": // TODO: Support dark mode
+        case "subtle": 
           return clsx(
             textButtonClasses,
             // background

@@ -1,3 +1,5 @@
+import React from 'react';
+
 const EmptyBasicIcon = (props) => (
   <svg
     width="121"
