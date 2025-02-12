@@ -1,4 +1,4 @@
-⚠️ This app supports indexes created with the latest models—Marengo 2.7 and Pegasus 1.2. For indexes built with older models, such as Marengo 2.6 and Pegasus 1.1, please refer to [Crop-Seek-V1.2](https://github.com/mrnkim/crop-seek-v1.2), which supports these models using API version 1.2.
+_⚠️ This app supports indexes created with the **latest models — Marengo 2.7 and Pegasus 1.2**. For indexes built with older models, such as Marengo 2.6 and Pegasus 1.1, please refer to [Crop-Seek-V1.2](https://github.com/mrnkim/crop-seek-v1.2), which supports these models using Twelve Labs api version 1.2._
 
 ## 👋 Introduction
 
